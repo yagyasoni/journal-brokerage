@@ -1,0 +1,355 @@
+@import "tailwindcss";
+@import "shadcn/tailwind.css";
+
+/* This brand is light-only. Scope `dark:` to an explicit .dark ancestor that we
+   never render, so shadcn's built-in dark utilities stay inert under OS dark. */
+@custom-variant dark (&:is(.dark *));
+
+/* ==========================================================================
+   Journal Brokerage — design tokens
+   Brand: navy #1a2a54 · gold #b1813a · paper #f7f5ee · white #ffffff
+   Text-bearing gold is shifted (gold-deep / gold-light) to clear WCAG AA
+   against white/paper and navy respectively. Never use raw hex in JSX.
+   ========================================================================== */
+
+@theme {
+  /* Brand */
+  --color-navy: #1a2a54;
+  --color-navy-raised: #223464; /* cards sitting on navy */
+  --color-navy-deep: #14203f; /* footer / deepest band */
+  --color-navy-black: #0a1226; /* cinematic floor beneath the hero footage */
+  --color-gold: #b1813a; /* rules, seals, icons, large numerals */
+  --color-gold-deep: #8f6626; /* gold TEXT on white/paper · gold button fill */
+  --color-gold-light: #c79a51; /* gold TEXT on navy */
+  --color-gold-bright: #e3bc7c; /* hairlines and glints on the cinematic hero */
+  --color-paper: #f7f5ee;
+
+  /* Ink */
+  --color-ink: #16213f; /* headings on light */
+  --color-slate: #4d5772; /* body copy on light */
+  --color-mist: #ccd3e4; /* body copy on navy */
+  --color-verified: #2f6b4f; /* reassuring record values */
+
+  /* Hairlines */
+  --color-rule: #e4e1d7;
+  --color-rule-strong: #d3cfc1;
+  --color-rule-navy: #35406b;
+
+  /* Type — one voice.
+     The whole site is set in DM Sans, the open stand-in for the licensed
+     geometric sans the reference brand uses: circular bowls, tall x-height,
+     and a 300 weight that carries the tracked uppercase display treatment.
+     Weight, tracking and case do all the work that a second family used to. */
+  --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  /* Geometry — sharp, ledger-like */
+  --radius: 0.125rem;
+
+  /* Motion */
+  --ease-quiet: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/* Map shadcn/Base UI primitives onto the brand palette. */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --font-heading: var(--font-sans);
+  --radius-sm: calc(var(--radius) * 0.5);
+  --radius-md: var(--radius);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 2);
+  --radius-2xl: calc(var(--radius) * 3);
+  --radius-3xl: calc(var(--radius) * 4);
+  --radius-4xl: calc(var(--radius) * 5);
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #16213f;
+  --card: #ffffff;
+  --card-foreground: #16213f;
+  --popover: #ffffff;
+  --popover-foreground: #16213f;
+  --primary: #1a2a54;
+  --primary-foreground: #ffffff;
+  --secondary: #f7f5ee;
+  --secondary-foreground: #1a2a54;
+  --muted: #f7f5ee;
+  --muted-foreground: #4d5772;
+  --accent: #f7f5ee;
+  --accent-foreground: #1a2a54;
+  --destructive: #8c2f2f;
+  --border: #e4e1d7;
+  --input: #d3cfc1;
+  --ring: #b1813a;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    @apply font-sans;
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    /* A multi-page site: never let a wide table or marquee push the viewport. */
+    overflow-x: hidden;
+    font-feature-settings:
+      "kern" 1,
+      "liga" 1;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background-color: var(--color-navy);
+    color: #ffffff;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-gold-deep);
+    outline-offset: 3px;
+  }
+}
+
+/* ==========================================================================
+   Type system
+   Four voices, all one family. Sizes are fluid so the scale holds together
+   between breakpoints instead of stepping. Call sites set colour only.
+   ========================================================================== */
+
+@layer components {
+  /* The hero line, and nothing else. */
+  .type-display {
+    font-weight: 300;
+    font-size: clamp(1.625rem, 3.6vw, 2.875rem);
+    line-height: 1.24;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+  }
+
+  /* Section headings. */
+  .type-heading {
+    font-weight: 300;
+    font-size: clamp(1.5rem, 2.8vw, 2.25rem);
+    line-height: 1.22;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* Row and card titles — sentence case, so a heading and a title never
+     compete for the same emphasis. */
+  .type-title {
+    font-weight: 300;
+    font-size: clamp(1.25rem, 1.8vw, 1.625rem);
+    line-height: 1.28;
+    letter-spacing: -0.005em;
+  }
+
+  /* The long light statement that opens a band. */
+  .type-statement {
+    font-weight: 300;
+    font-size: clamp(1.25rem, 2.2vw, 1.875rem);
+    line-height: 1.5;
+    letter-spacing: -0.004em;
+  }
+
+  /* Every small tracked cap on the site — eyebrows, labels, chips, legals.
+     This replaced the mono; tracking and weight carry the "record" character
+     that the monospace used to. */
+  .type-label {
+    font-size: 0.71875rem;
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  /* Figures that have to line up in a column of records. */
+  .tnum {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+  }
+}
+
+@layer components {
+  /* Ledger hairline: the only "elevation" this design uses on light bands. */
+  .rule-y {
+    @apply border-t border-rule;
+  }
+
+  /* The hairline shadow the sticky bar earns once the reader leaves the hero. */
+  .lift-bar {
+    box-shadow: 0 1px 16px -6px color-mix(in oklab, var(--color-navy) 30%, transparent);
+  }
+
+  /* The single permitted card shadow — a soft navy lift under a document. */
+  .lift-navy {
+    box-shadow: 0 18px 50px -28px color-mix(in oklab, var(--color-navy) 38%, transparent);
+  }
+
+  /* A gold hairline that fades out at both ends — the house divider on navy. */
+  .rule-gold-fade {
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      transparent,
+      var(--color-gold) 18%,
+      var(--color-gold) 82%,
+      transparent
+    );
+  }
+}
+
+@layer utilities {
+  /* ---- Cinematic hero ---------------------------------------------------- */
+
+  /* Legibility veil over the footage.
+     The reference hero lets its footage read as a place — the copy is held by
+     an even, restrained wash rather than a heavy corner scrim. So: one flat
+     tint across the whole frame, plus gentle darkening at the very top and
+     bottom where the bar and the rail sit. Enough for white text to clear AA
+     on bright daylight footage, light enough that the picture still carries. */
+  .hero-veil {
+    background:
+      linear-gradient(
+        to bottom,
+        color-mix(in oklab, var(--color-navy-black) 55%, transparent) 0%,
+        transparent 24%,
+        transparent 62%,
+        color-mix(in oklab, var(--color-navy-black) 62%, transparent) 100%
+      ),
+      color-mix(in oklab, var(--color-navy-black) 32%, transparent);
+  }
+
+  /* The hairline grid that hints at a ruled ledger behind a dark band. */
+  .ledger-grid {
+    background-image:
+      linear-gradient(to right, rgb(255 255 255 / 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(255 255 255 / 0.04) 1px, transparent 1px);
+    background-size: 92px 92px;
+  }
+
+  /* A single warm bloom behind headings on navy — the only "glow" allowed. */
+  .gold-bloom {
+    background: radial-gradient(
+      60% 60% at 50% 40%,
+      color-mix(in oklab, var(--color-gold) 22%, transparent) 0%,
+      transparent 70%
+    );
+  }
+
+  /* ---- Scroll reveal (IntersectionObserver toggles data-revealed) -------- */
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(14px);
+    transition:
+      opacity 0.75s var(--ease-quiet),
+      transform 0.75s var(--ease-quiet);
+    will-change: opacity, transform;
+  }
+
+  [data-reveal][data-revealed="true"] {
+    opacity: 1;
+    transform: none;
+    will-change: auto;
+  }
+
+  /* ---- Marquee ---------------------------------------------------------- */
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee-scroll 46s linear infinite;
+  }
+
+  @keyframes marquee-scroll {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+
+  /* ---- The hero's still fallback ---------------------------------------- */
+  /* Shown whenever the video cannot play: no file yet, a codec the browser
+     refuses, a save-data connection, or reduced motion. It carries the same
+     palette so the hero never looks broken or empty. */
+  .hero-still {
+    background:
+      radial-gradient(
+        70% 90% at 78% 18%,
+        color-mix(in oklab, var(--color-gold) 34%, transparent) 0%,
+        transparent 62%
+      ),
+      radial-gradient(
+        60% 80% at 12% 80%,
+        color-mix(in oklab, var(--color-navy) 88%, transparent) 0%,
+        transparent 68%
+      ),
+      linear-gradient(150deg, var(--color-navy) 0%, var(--color-navy-black) 72%);
+  }
+}
+
+/* No JS (or reduced motion): show everything, move nothing. */
+@media (scripting: none) {
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .marquee-track {
+    animation-play-state: paused;
+    transform: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

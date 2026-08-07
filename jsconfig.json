@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "checkJs": false,
+    "allowJs": true,
+    "noEmit": true,
+    "baseUrl": ".",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "target": "esnext",
+    "jsx": "preserve",
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src/**/*.js", "src/**/*.jsx", "*.mjs"],
+  "exclude": ["node_modules", ".next"]
+}
