@@ -2,6 +2,7 @@ import { CoreServices } from "@/components/sections/CoreServices";
 import { FinalCTA } from "@/components/sections/FinalCTA";
 import { Hero } from "@/components/sections/Hero";
 import { HowItWorks } from "@/components/sections/HowItWorks";
+import { RecordBand } from "@/components/sections/RecordBand";
 import { SampleReport } from "@/components/sections/SampleReport";
 import { ServeAndCoverage } from "@/components/sections/ServeAndCoverage";
 import { StatementBand } from "@/components/sections/StatementBand";
@@ -18,6 +19,7 @@ export default function HomePage() {
       <Hero />
       <StatementBand />
       <CoreServices />
+      <RecordBand />
       <WhyJournalBrokerage />
       <HowItWorks />
       <ServeAndCoverage />

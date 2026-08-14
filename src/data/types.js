@@ -170,6 +170,22 @@
  */
 
 /**
+ * A full-bleed picture band whose frame opens as the reader scrolls past it.
+ * `title` and `heading` are deliberately different lines, not one repeated:
+ * the title is set over the small frame and leaves as the frame opens, and the
+ * heading arrives inside it once it fills the screen.
+ *
+ * @typedef {object} ExpandBand
+ * @property {string} image Path under `public/`, e.g. "/media/1.png".
+ * @property {string} alt What the photograph shows.
+ * @property {string} title Over the closed frame. Decorative — the heading
+ *   below is the one that counts for the page outline.
+ * @property {string} heading The section's real `h2`.
+ * @property {string} body One paragraph under the heading.
+ * @property {string} scrollHint Short prompt that fades on the first movement.
+ */
+
+/**
  * @typedef {object} ReportRow
  * @property {string} label Uppercase mono record label.
  * @property {string} value

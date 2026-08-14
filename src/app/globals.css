@@ -150,8 +150,11 @@
 
 @layer components {
   /* The hero line, and nothing else. */
+  /* 500 rather than the 300 the other voices use: at 0.13em tracking over
+     footage a hairline weight goes translucent, and this line has to hold the
+     frame. Still light enough to read as display type, not a headline. */
   .type-display {
-    font-weight: 300;
+    font-weight: 500;
     font-size: clamp(1.625rem, 3.6vw, 2.875rem);
     line-height: 1.24;
     letter-spacing: 0.13em;
@@ -285,6 +288,309 @@
     will-change: auto;
   }
 
+  /* ---- Fold-in text (GSAP drives this; see shared/FoldText.jsx) ---------- */
+  /* Carries no type of its own — size, weight, tracking and case all come from
+     the `type-*` class on the element wrapping it. `block` so a centred line
+     still centres and `text-wrap: balance` still balances. */
+  .fold-text {
+    display: block;
+  }
+
+  .fold-text-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .fold-text-line {
+    display: block;
+  }
+
+  /* The break atom. Every glyph inside is its own inline-block, so without
+     this the line would have no break opportunity left and would run off. */
+  .fold-text-word {
+    display: inline-block;
+    white-space: nowrap;
+  }
+
+  /* The perspective has to sit on the parent of the thing being rotated. */
+  .fold-text-segment {
+    display: inline-block;
+    perspective: var(--fold-perspective, 700px);
+    transform-style: preserve-3d;
+  }
+
+  .fold-text-piece {
+    position: relative;
+    display: inline-block;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+  }
+
+  /* The crease: a shadow raking across the glyph, strongest at the hinge,
+     fading to a highlight at the far edge. Opacity is tweened to 0 as the
+     piece comes level. */
+  .fold-text-piece::after {
+    content: "";
+    position: absolute;
+    inset: -0.08em -0.02em;
+    border-radius: 0.08em;
+    opacity: var(--fold-crease, 0);
+    mix-blend-mode: multiply;
+    pointer-events: none;
+  }
+
+  .fold-text-piece[data-fold-hinge="top"]::after {
+    background: linear-gradient(
+      180deg,
+      rgb(0 0 0 / 0.58) 0%,
+      rgb(0 0 0 / 0.22) 42%,
+      rgb(255 255 255 / 0.26) 100%
+    );
+  }
+
+  .fold-text-piece[data-fold-hinge="bottom"]::after {
+    background: linear-gradient(
+      0deg,
+      rgb(0 0 0 / 0.58) 0%,
+      rgb(0 0 0 / 0.22) 42%,
+      rgb(255 255 255 / 0.26) 100%
+    );
+  }
+
+  .fold-text-piece[data-fold-hinge="left"]::after {
+    background: linear-gradient(
+      90deg,
+      rgb(0 0 0 / 0.58) 0%,
+      rgb(0 0 0 / 0.22) 42%,
+      rgb(255 255 255 / 0.26) 100%
+    );
+  }
+
+  .fold-text-piece[data-fold-hinge="right"]::after {
+    background: linear-gradient(
+      270deg,
+      rgb(0 0 0 / 0.58) 0%,
+      rgb(0 0 0 / 0.22) 42%,
+      rgb(255 255 255 / 0.26) 100%
+    );
+  }
+
+  /* ---- Typed text (JS drives this; see shared/TypeText.jsx) -------------- */
+  /* No type of its own — the parent's `type-*` class owns all of it. */
+  .type-text {
+    display: block;
+  }
+
+  /* Same break atom as `.fold-text-word`: every character is its own element,
+     so without this the paragraph would have no break opportunity left. */
+  .type-text-word {
+    display: inline-block;
+    white-space: nowrap;
+  }
+
+  .type-text-char {
+    position: relative;
+  }
+
+  /* `visibility`, not `display` or `opacity`: the character keeps its box, so
+     the paragraph is laid out at full size from the first frame and neither
+     re-wraps nor re-centres as it fills in. */
+  .type-text[data-state="armed"] .type-text-char,
+  .type-text[data-state="typing"] .type-text-char,
+  .type-text[data-state="done"] .type-text-char {
+    visibility: hidden;
+  }
+
+  .type-text .type-text-char[data-typed] {
+    visibility: visible;
+  }
+
+  /* The caret rides the character about to be typed, and is absolutely
+     positioned so it never takes up space of its own. */
+  .type-text-char[data-caret]::after {
+    content: var(--type-caret, "|");
+    position: absolute;
+    top: 0;
+    left: 0;
+    visibility: visible;
+    font-weight: 300;
+    animation: type-text-blink 1.06s ease-in-out infinite;
+  }
+
+  /* Landed: park it past the final glyph and let it go. */
+  .type-text-char[data-caret="end"]::after {
+    left: 100%;
+    animation:
+      type-text-blink 1.06s ease-in-out infinite,
+      type-text-caret-out 0.45s 0.35s var(--ease-quiet) forwards;
+  }
+
+  @keyframes type-text-blink {
+    0%,
+    45% {
+      opacity: 1;
+    }
+    55%,
+    100% {
+      opacity: 0.05;
+    }
+  }
+
+  @keyframes type-text-caret-out {
+    to {
+      opacity: 0;
+    }
+  }
+
+  /* ---- Scroll-expand picture band (JS drives this; see ScrollExpand.jsx) -- */
+  /* Every rule here is the *open* state. JS closes the frame on mount and
+     drives it from the scroll position, so no-JS and reduced-motion readers
+     are left with the finished picture and the full message. */
+  .scroll-expand {
+    position: relative;
+    width: 100%;
+  }
+
+  .scroll-expand-track {
+    position: relative;
+    width: 100%;
+  }
+
+  .scroll-expand-stage {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    height: 100svh;
+    overflow: hidden;
+  }
+
+  /* The frame carries the shape; the two gradient masks carry the softness.
+     A hard-edged rectangle reads as a card laid on the section — feathering
+     the edge lets the picture sit in the navy instead. Both the inset and the
+     feather are driven from JS, and the feather reaches zero exactly as the
+     frame reaches full bleed. All three default to the open state. */
+  .scroll-expand-frame {
+    --se-inset-x: 0%;
+    --se-inset-y: 0%;
+    --se-feather-k: 0;
+    --se-feather: calc(clamp(1.75rem, 5.5vw, 6rem) * var(--se-feather-k));
+
+    position: absolute;
+    inset: 0;
+    clip-path: inset(0 0 0 0 round 0);
+    will-change: clip-path;
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent var(--se-inset-x),
+      #000 calc(var(--se-inset-x) + var(--se-feather)),
+      #000 calc(100% - var(--se-inset-x) - var(--se-feather)),
+      transparent calc(100% - var(--se-inset-x))
+    );
+    mask-image: linear-gradient(
+      to right,
+      transparent var(--se-inset-x),
+      #000 calc(var(--se-inset-x) + var(--se-feather)),
+      #000 calc(100% - var(--se-inset-x) - var(--se-feather)),
+      transparent calc(100% - var(--se-inset-x))
+    );
+  }
+
+  .scroll-expand-feather {
+    position: absolute;
+    inset: 0;
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      transparent var(--se-inset-y),
+      #000 calc(var(--se-inset-y) + var(--se-feather)),
+      #000 calc(100% - var(--se-inset-y) - var(--se-feather)),
+      transparent calc(100% - var(--se-inset-y))
+    );
+    mask-image: linear-gradient(
+      to bottom,
+      transparent var(--se-inset-y),
+      #000 calc(var(--se-inset-y) + var(--se-feather)),
+      #000 calc(100% - var(--se-inset-y) - var(--se-feather)),
+      transparent calc(100% - var(--se-inset-y))
+    );
+  }
+
+  .scroll-expand-media {
+    position: absolute;
+    inset: 0;
+    transform-origin: center;
+    will-change: transform;
+  }
+
+  /* Legibility wash. Built like `.hero-veil`, and for the same reason: the
+     copy is centred and this photograph is brightest dead centre, so a
+     bottom-weighted gradient alone leaves the heading with nothing under it.
+     One soft pool where the words sit, edge darkening top and bottom, and a
+     flat tint so no part of the frame can strand white text. */
+  .scroll-expand-scrim {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.8;
+    background:
+      radial-gradient(
+        76% 60% at 50% 46%,
+        color-mix(in oklab, var(--color-navy-black) 82%, transparent) 0%,
+        transparent 74%
+      ),
+      linear-gradient(
+        to top,
+        color-mix(in oklab, var(--color-navy-black) 80%, transparent) 0%,
+        color-mix(in oklab, var(--color-navy-black) 22%, transparent) 50%,
+        color-mix(in oklab, var(--color-navy-black) 52%, transparent) 100%
+      ),
+      color-mix(in oklab, var(--color-navy-black) 28%, transparent);
+  }
+
+  .scroll-expand-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 6%;
+    text-align: center;
+    will-change: opacity, transform;
+  }
+
+  .scroll-expand-title {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-inline: 6%;
+    text-align: center;
+    color: #ffffff;
+    text-shadow: 0 2px 24px color-mix(in oklab, var(--color-navy-black) 45%, transparent);
+    opacity: 0;
+    pointer-events: none;
+    will-change: opacity, transform;
+  }
+
+  .scroll-expand-hint {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 1.75rem;
+    text-align: center;
+    color: color-mix(in oklab, #ffffff 55%, transparent);
+    opacity: 0;
+    pointer-events: none;
+    will-change: opacity, transform;
+  }
+
   /* ---- Marquee ---------------------------------------------------------- */
   .marquee-track {
     display: flex;
@@ -327,6 +633,17 @@
     opacity: 1;
     transform: none;
   }
+
+  /* FoldText renders its pieces already folded away, so with no JS to unfold
+     them the line would never arrive. Put it back. */
+  .fold-text-piece {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .fold-text-piece::after {
+    opacity: 0 !important;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -343,6 +660,28 @@
   .marquee-track {
     animation-play-state: paused;
     transform: none;
+  }
+
+  /* FoldText's JS guard settles these on mount; this covers the frames before
+     hydration, so the line is simply there from the first paint. */
+  .fold-text-piece {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .fold-text-piece::after {
+    opacity: 0 !important;
+  }
+
+  /* TypeText never arms under reduced motion, so this only matters if the
+     setting is turned on after the page has loaded — but then it matters a
+     lot, because a half-typed sentence would otherwise stay half-typed. */
+  .type-text .type-text-char {
+    visibility: visible !important;
+  }
+
+  .type-text-char[data-caret]::after {
+    content: none;
   }
 
   *,
