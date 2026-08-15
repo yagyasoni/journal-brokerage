@@ -2,6 +2,7 @@ import { Eyebrow } from "@/components/shared/Eyebrow";
 import { Marquee } from "@/components/shared/Marquee";
 import { Container } from "@/components/shared/SectionShell";
 import { Reveal } from "@/components/shared/Reveal";
+import { TypeText } from "@/components/shared/TypeText";
 import { brand } from "@/data/nav";
 import { trustMarquee } from "@/data/promises";
 
@@ -12,6 +13,10 @@ import { trustMarquee } from "@/data/promises";
  * one statement, set large and light on cream, framed by gold hairlines. The
  * moving strip beneath it carries the practice marks — so the page has motion
  * above and below the fold, and the statement gets to sit still.
+ *
+ * The statement types itself in the first time it is scrolled to, just after
+ * `Reveal` has finished bringing the band up. It is laid out at full size
+ * throughout, so nothing on the page moves while it fills in.
  */
 export function StatementBand() {
   return (
@@ -21,7 +26,7 @@ export function StatementBand() {
           <Eyebrow align="center">The practice</Eyebrow>
 
           <p className="type-statement mx-auto mt-9 max-w-3xl text-ink">
-            {brand.statement}
+            <TypeText text={brand.statement} speed={22} />
           </p>
 
           <div aria-hidden="true" className="mx-auto mt-12 h-px w-20 bg-gold" />

@@ -1,5 +1,6 @@
 import { HeroVideo } from "@/components/sections/HeroVideo";
 import { ButtonLink } from "@/components/shared/ButtonLink";
+import { FoldText } from "@/components/shared/FoldText";
 import { Container } from "@/components/shared/SectionShell";
 import { routes } from "@/data/nav";
 
@@ -20,6 +21,11 @@ const TRUST_CHIPS = [
  * back on the optical centre. `Nav` goes transparent over this section on the
  * home route, which is the other half of the same effect. The offsets are the
  * bar's full expanded height — crest row, hairline, menu row.
+ *
+ * The headline unfolds letter by letter as the page loads (`FoldText`), which
+ * is the one piece of motion in the copy stack — the line below it and the
+ * action beneath that stay still, and nothing moves at all under reduced
+ * motion. `type-display` still owns every typographic decision.
  */
 export function Hero() {
   return (
@@ -34,7 +40,16 @@ export function Hero() {
       <div className="relative flex flex-1 items-center justify-center pt-[165px] pb-24 md:pt-[177px] md:pb-28">
         <Container className="text-center">
           <h1 id="hero-heading" className="type-display mx-auto max-w-4xl text-white">
-            Source-verified property intelligence
+            <FoldText
+              text="Source-verified property intelligence"
+              splitBy="char"
+              hinge="top"
+              trigger="mount"
+              duration={0.80}
+              stagger={0.014}
+              perspective={700}
+              creaseShading={0.55}
+            />
           </h1>
 
           <p className="mx-auto mt-7 max-w-xl text-[17px] leading-[1.6] font-light text-white/85 sm:text-[19px]">
