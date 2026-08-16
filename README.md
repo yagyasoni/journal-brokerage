@@ -27,24 +27,52 @@ Next.js 15 (App Router) · JavaScript/JSX only · Tailwind CSS v4 · shadcn/ui o
 Tokens live in `src/app/globals.css` under `@theme`. **Never write a raw hex value in
 JSX** — use the token classes.
 
-| Token                                | Value     | Use                                               |
-| ------------------------------------ | --------- | ------------------------------------------------- |
-| `navy`                               | `#1a2a54` | Bands, header plates, solid chips                 |
-| `navy-raised` / `navy-deep`          | —         | Cards on navy / deepest band                      |
-| `gold`                               | `#b1813a` | Rules, seals, icons, large display numerals       |
-| `gold-deep`                          | `#8f6626` | Gold **text** on white/paper; gold button fill    |
-| `gold-light`                         | `#c79a51` | Gold **text** on navy                             |
-| `paper`                              | `#f7f5ee` | Alternate section band                            |
-| `ink` / `slate` / `mist`             | —         | Headings / body on light / body on navy           |
-| `verified`                           | `#2f6b4f` | Reassuring record values                          |
-| `rule` / `rule-strong` / `rule-navy` | —         | Hairlines — this design uses borders, not shadows |
+| Token                                | Value     | Use                                            |
+| ------------------------------------ | --------- | ---------------------------------------------- |
+| `navy`                               | `#1a2a54` | Bands, header plates, solid chips              |
+| `navy-raised` / `navy-deep`          | —         | Cards on navy / deepest band (closing CTA)     |
+| `navy-black`                         | `#0a1226` | The cinematic floor beneath the hero footage   |
+| `gold`                               | `#b1813a` | Rules, seals, icons, large display numerals    |
+| `gold-deep`                          | `#8f6626` | Gold **text** on white/paper; gold button fill |
+| `gold-light`                         | `#c79a51` | Gold **text** on navy                          |
+| `gold-bright`                        | `#e3bc7c` | Hairlines and glints on the cinematic hero     |
+| `paper`                              | `#f7f5ee` | Alternate section band                         |
+| `ink` / `slate` / `mist`             | —         | Headings / body on light / body on navy        |
+| `verified`                           | `#2f6b4f` | Reassuring record values                       |
+| `rule` / `rule-strong` / `rule-navy` | —         | Hairlines — this design separates with borders |
 
-Gold is split into three tokens because the brand gold clears WCAG AA neither on white
-(3.46:1) nor as a button fill behind white text. Every visible text node on the landing
-page has been measured; the worst small-text ratio is 4.70:1.
+Gold is split into three text-safe tokens because the brand gold clears WCAG AA neither on
+white (3.46:1) nor as a button fill behind white text. Every visible text node on the
+landing page has been measured; the worst small-text ratio is 4.70:1.
 
-Fonts: **Libre Caslon** headings, **IBM Plex Sans** body, **IBM Plex Mono** for all record
-data — file numbers, parcels, chips, eyebrow labels, stat captions.
+Separation is done with hairlines, not elevation. There are exactly two sanctioned
+shadows: `.lift-navy` (the document card) and `.lift-bar` (the sticky nav, once the reader
+leaves the hero). Don't add a third.
+
+### Type
+
+**One family: DM Sans**, loaded in `src/app/layout.jsx`. It is the open stand-in for the
+licensed geometric sans the reference brand uses. There is no serif and no monospace —
+weight, tracking, case and scale carry every distinction a second family used to. Never
+reach for `font-serif` or `font-mono`; neither is defined, so both fall back to a system
+face and break the page.
+
+Five classes, defined once in `globals.css` under `@layer components`. A call site sets
+**colour and spacing only** — `className="type-heading mt-7 text-ink"`. Never inline a
+size, weight, tracking or `uppercase` on text that already has one of these.
+
+| Class            | Use                                                                                                                                |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `type-display`   | The hero `h1` and the closing CTA `h2`. Nothing else. Uppercase.                                                                   |
+| `type-heading`   | Every section heading, and the `h1` on an inner page. Uppercase.                                                                   |
+| `type-title`     | Card, row and list-item titles (`h3`). Sentence case, deliberately — so a title and a heading never compete for the same emphasis. |
+| `type-statement` | The one long light statement that opens a band. Rare.                                                                              |
+| `type-label`     | Every small tracked cap: eyebrows, chips, record labels, stat captions, nav links, footer column heads, step numbers, legals.      |
+| `tnum`           | Any figure that has to line up in a column — `01`/`02`, file and parcel numbers, stat values.                                      |
+
+Body copy has no class. Match the established scale: `text-[17px] leading-[1.7]` for the
+intro paragraph under a heading, `text-[15.5px] leading-[1.7]` for card and step body,
+`text-[14.5px]` for record values and footer links, `text-[12.5px]` for record sub-notes.
 
 ## Structure
 
