@@ -1,4 +1,5 @@
-import { PagePlaceholder } from "@/components/layout/PagePlaceholder";
+import { SolutionDetail } from "@/components/shared/SolutionDetail";
+import { solutionsById } from "@/data/solutions";
 
 export const metadata = {
   title: "Title Search Solutions",
@@ -7,5 +8,5 @@ export const metadata = {
 };
 
 export default function TitleSearchPage() {
-  return <PagePlaceholder eyebrow="Solutions" title="Title Search Solutions" />;
+  return <SolutionDetail solution={solutionsById["title-search"]} />;
 }

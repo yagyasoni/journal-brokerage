@@ -1,4 +1,5 @@
-import { PagePlaceholder } from "@/components/layout/PagePlaceholder";
+import { SolutionDetail } from "@/components/shared/SolutionDetail";
+import { solutionsById } from "@/data/solutions";
 
 export const metadata = {
   title: "Property Tax Solutions",
@@ -7,5 +8,5 @@ export const metadata = {
 };
 
 export default function PropertyTaxPage() {
-  return <PagePlaceholder eyebrow="Solutions" title="Property Tax Solutions" />;
+  return <SolutionDetail solution={solutionsById["property-tax"]} />;
 }

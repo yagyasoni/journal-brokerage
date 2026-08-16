@@ -4,7 +4,7 @@ Next.js 15 App Router · **JSX only** (no `.ts`/`.tsx`) · Tailwind v4 · shadcn
 
 Derived from the Engineering Handbook (rev. 1), verified against this repository. Where the two disagree, **this file wins** — see [Corrections](#corrections-to-handbook-rev-1) at the bottom.
 
-State today: 13 routes, **1 built page** (`/`), **12 `PagePlaceholder` routes**, plus a hand-built `not-found.jsx`.
+State today: 13 routes, **11 built pages**, **2 `PagePlaceholder` routes** (`/order`, `/request-consultation`), plus a hand-built `not-found.jsx`.
 
 ## Read first
 
