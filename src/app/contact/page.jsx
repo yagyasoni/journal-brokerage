@@ -9,7 +9,6 @@ import {
   detailsSection,
   enquiryFields,
   responsePromise,
-  submitDisabledNote,
 } from "@/data/contact";
 import { primaryCta, secondaryCta } from "@/data/nav";
 
@@ -39,7 +38,6 @@ export default function ContactPage() {
             legend={formLabel}
             requiredNote={requiredNote}
             submitLabel={submitLabel}
-            disabledNote={submitDisabledNote}
           />
 
           <div>
@@ -73,14 +71,14 @@ export default function ContactPage() {
         </div>
       </SectionShell>
 
-      <CTABand
+      {/* <CTABand
         headingId="contact-cta"
         eyebrow={cta.eyebrow}
         heading={cta.heading}
         body={cta.body}
         primary={primaryCta}
         secondary={secondaryCta}
-      />
+      /> */}
     </>
   );
 }

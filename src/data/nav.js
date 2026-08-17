@@ -16,7 +16,7 @@ export const routes = {
   coverage: "/coverage",
   sampleReport: "/sample-report",
   contact: "/contact",
-  order: "/order",
+  order: "/contact",
   consultation: "/request-consultation",
 };
 

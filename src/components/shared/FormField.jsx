@@ -17,11 +17,17 @@ const controlClasses =
  * @param {{
  *   field: import("@/data/types").FormFieldDef,
  *   disabled?: boolean,
+ *   error?: string,
  *   className?: string,
  * }} props
  */
-export function FormField({ field, disabled = false, className }) {
+export function FormField({ field, disabled = false, error, className }) {
   const { name, label, type, required, placeholder, autoComplete, options, full } = field;
+
+  const errorId = `${name}-error`;
+  /** Only point at the message once there is one, or the id dangles. */
+  const invalidProps = error ? { "aria-invalid": true, "aria-describedby": errorId } : {};
+  const invalidRing = error && "border-gold-deep";
 
   return (
     <div className={cn(full && "sm:col-span-2", className)}>
@@ -42,7 +48,8 @@ export function FormField({ field, disabled = false, className }) {
             required={required}
             disabled={disabled}
             defaultValue=""
-            className={cn(controlClasses, "appearance-none pr-11")}
+            {...invalidProps}
+            className={cn(controlClasses, "appearance-none pr-11", invalidRing)}
           >
             {/* An empty first option keeps the control unselected, so a
                 required select actually blocks an empty submission. */}
@@ -69,9 +76,16 @@ export function FormField({ field, disabled = false, className }) {
           disabled={disabled}
           placeholder={placeholder}
           autoComplete={autoComplete}
-          className={cn(controlClasses, "mt-3")}
+          {...invalidProps}
+          className={cn(controlClasses, "mt-3", invalidRing)}
         />
       )}
+
+      {error ? (
+        <p id={errorId} className="mt-2 text-[12.5px] leading-snug text-gold-deep">
+          {error}
+        </p>
+      ) : null}
     </div>
   );
 }

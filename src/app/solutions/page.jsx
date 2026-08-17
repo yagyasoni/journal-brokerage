@@ -74,14 +74,14 @@ export default function SolutionsPage() {
         />
       ))}
 
-      <CTABand
+      {/* <CTABand
         headingId="solutions-cta"
         eyebrow={cta.eyebrow}
         heading={cta.heading}
         body={cta.body}
         primary={primaryCta}
         secondary={secondaryCta}
-      />
+      /> */}
     </>
   );
 }

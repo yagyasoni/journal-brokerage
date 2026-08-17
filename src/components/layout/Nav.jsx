@@ -58,26 +58,6 @@ export function Nav() {
         scrolled && "lift-bar"
       )}
     >
-      {/* ---- Crest row -----------------------------------------------------
-          At the top of a page the mark stands alone, centred, the way a
-          letterhead does. It collapses to nothing on scroll and the compact
-          mark in the row below takes over — one bar, two postures. */}
-      {/* <div
-        className={cn(
-          "overflow-hidden transition-[height,opacity] duration-500 ease-[var(--ease-quiet)]",
-          scrolled ? "h-0 opacity-0" : "h-[96px] opacity-100 md:h-[104px]"
-        )}
-      >
-        <Container className="flex h-[96px] items-center justify-center md:h-[104px]">
-          <Logo
-            tone={overlay ? "navy" : "light"}
-            align="center"
-            aria-hidden={scrolled ? "true" : undefined}
-            tabIndex={scrolled ? -1 : undefined}
-          />
-        </Container>
-      </div> */}
-
       <div
         aria-hidden="true"
         className={cn(

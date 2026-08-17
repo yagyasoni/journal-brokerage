@@ -58,14 +58,14 @@ export default function SampleReportPage() {
 
       <FileRecord />
 
-      <CTABand
+      {/* <CTABand
         headingId="sample-report-cta"
         eyebrow={cta.eyebrow}
         heading={cta.heading}
         body={cta.body}
         primary={primaryCta}
         secondary={secondaryCta}
-      />
+      /> */}
     </>
   );
 }

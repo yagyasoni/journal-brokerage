@@ -1,3 +1,6 @@
 allowBuilds:
+  # react-email's preview CLI (`pnpm email dev`) bundles with esbuild, whose
+  # install script fetches the platform binary. Build-time only; never shipped.
+  esbuild: true
   sharp: true
   unrs-resolver: true

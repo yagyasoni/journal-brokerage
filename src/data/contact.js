@@ -17,16 +17,35 @@ export const contactPage = {
 };
 
 /**
- * ⚠️ SUBMISSION IS NOT WIRED UP YET.
+ * Everything the form says while it is being filled in, sent, or answered.
  *
- * The form is UI only: there is no action, no API route, and no email
- * provider in this project. The submit button is disabled and this note is
- * shown beneath it so a visitor can never fill the form in and lose the
- * enquiry. Delete `submitDisabledNote`, drop the `disabled` prop in
- * `EnquiryForm`, and point the form at your handler — all three together.
+ * Submission posts to `/api/lead`, which validates with the same schema the
+ * browser used (`@/lib/lead-schema`) and forwards the enquiry by email. Keep
+ * these strings here rather than in the component: an error a visitor reads is
+ * copy like any other.
  */
-export const submitDisabledNote =
-  "This form is not connected yet. Please use the details opposite in the meantime.";
+export const enquiryStatus = {
+  sending: "Sending…",
+  successTitle: "Request sent",
+  successBody:
+    "We have your file and will confirm the scope and turnaround the same business day.",
+  errorTitle: "Request not sent",
+  errorBody:
+    "Something went wrong on our side. Please try again, or use the details opposite.",
+  invalidBody: "Please check the highlighted fields and try again.",
+};
+
+/** Per-field validation messages, read by `@/lib/lead-schema`. */
+export const enquiryErrors = {
+  name: "Enter your full name.",
+  email: "Enter a valid work email so we can reply.",
+  emailLong: "That email address is too long.",
+  company: "That company name is too long.",
+  phone: "That phone number is too long.",
+  need: "Choose the search you need.",
+  property: "Enter the property address, county and state.",
+  tooLong: "That entry is too long.",
+};
 
 /** @type {import("./types").FormFieldDef[]} */
 export const enquiryFields = [

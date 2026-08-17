@@ -54,14 +54,14 @@ export default function WhyUsPage() {
 
       <WhyMethod />
 
-      <CTABand
+      {/* <CTABand
         headingId="why-us-cta"
         eyebrow={cta.eyebrow}
         heading={cta.heading}
         body={cta.body}
         primary={primaryCta}
         secondary={secondaryCta}
-      />
+      /> */}
     </>
   );
 }

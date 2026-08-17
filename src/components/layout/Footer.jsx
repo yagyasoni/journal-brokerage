@@ -26,8 +26,8 @@ export function Footer() {
             <nav key={group.title} aria-label={group.title}>
               <h2 className="type-label text-gold-light">{group.title}</h2>
               <ul className="mt-7 space-y-4">
-                {group.links.map((link) => (
-                  <li key={link.href}>
+                {group.links.map((link, id) => (
+                  <li key={id}>
                     <Link
                       href={link.href}
                       className="text-[14.5px] text-mist transition-colors hover:text-white"
