@@ -142,20 +142,33 @@
  * document and carries `mono`/`verified` presentation flags a catalogue entry
  * has no use for.
  *
+ * The two texts are the same entry at two depths: `definition` is the line in
+ * the `/solutions` ledger, where twenty-one of them sit together; `detail` is
+ * the entry on the service's own page, where nine of them have room to explain
+ * themselves. Keep them saying the same thing.
+ *
  * @typedef {object} Deliverable
  * @property {string} name Catalogue name, set as an uppercase label.
- * @property {string} definition One sentence of plain English.
+ * @property {string} definition One sentence of plain English, for `/solutions`.
+ * @property {string} detail The fuller entry, for `/solutions/<line>`.
  */
 
 /**
- * The deep content of one service line, shown on `/solutions`. Title, number
- * and link are not repeated here — they are read from `services.js` by id, so
- * the two files cannot drift apart.
+ * The deep content of one service line, shown on `/solutions` and on the
+ * line's own page. Title, number and link are not repeated here — they are
+ * read from `services.js` by id, so the two files cannot drift apart.
  *
  * @typedef {object} SolutionLine
  * @property {string} id Must match an id in `services.js`.
- * @property {string} overview One paragraph beneath the service heading.
+ * @property {string} overview One paragraph beneath the service heading. Used
+ *   on both pages, so it is written to stand on its own.
+ * @property {string} headline The service page's own `h1` — the promise the
+ *   line makes, stated as a sentence.
+ * @property {string} stake One paragraph on what the search protects the file
+ *   from. The dark band in the middle of the service page.
  * @property {Deliverable[]} deliverables
+ * @property {string} [ctaBody] Overrides the shared closing paragraph where
+ *   this line asks for something different.
  */
 
 /**
