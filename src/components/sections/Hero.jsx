@@ -83,12 +83,21 @@ export function Hero() {
       </div>
 
       {/* The bottom rail, in the reference's position: a hairline and a row of
-          quiet marks that give the frame a floor to sit on. */}
+          quiet marks that give the frame a floor to sit on.
+
+          Two arrangements, because one row of four does not survive a phone.
+          The marks are different lengths, so a wrapping flex row packed them
+          left and broke wherever the widths happened to run out — three on one
+          line and a lonely fourth under them, which reads as a mistake rather
+          than as a rail. A two-column grid cannot do that: whatever the
+          viewport, it is always two even rows of two, aligned to the same left
+          edges as the copy above. From `sm` the row fits across the full
+          measure and the original spread returns untouched. */}
       <div className="relative border-t border-white/20">
         <Container>
-          <ul className="flex flex-wrap items-center gap-x-8 gap-y-2.5 py-5 sm:justify-between sm:gap-x-6 sm:py-6">
+          <ul className="grid grid-cols-2 gap-x-4 gap-y-3 py-5 sm:flex sm:flex-wrap sm:items-center sm:justify-between sm:gap-x-6 sm:gap-y-2.5 sm:py-6">
             {homeHero.marks.map((mark) => (
-              <li key={mark} className="type-label whitespace-nowrap text-white/75">
+              <li key={mark} className="type-label text-white/75 sm:whitespace-nowrap">
                 {mark}
               </li>
             ))}
