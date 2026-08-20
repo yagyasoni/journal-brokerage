@@ -501,6 +501,31 @@
     }
   }
 
+  /* The four marks along the bottom of the hero.
+     `type-label` still owns the register — the weight, the caps, the colour —
+     and this only resolves the one thing a fixed size cannot: on a phone the
+     rail is two columns of roughly half the viewport, and "Six Sigma standard"
+     at 11.5px with 0.16em of tracking is a hair wider than that, so it broke
+     over two lines while its three neighbours sat on one.
+
+     Sizing it in `vw` below `sm` makes the text and the column it has to fit
+     scale together, so a mark that fits at one width fits at every width in
+     the range rather than only at the one it was checked on. The tracking
+     comes in a little at the same time: at 0.16em the letter-spacing alone is
+     a quarter of the width of a long mark, and it is the cheapest place to
+     find room. Both revert at `sm`, where the rail is one row across the full
+     measure and there is space to spare. */
+  .hero-marks {
+    white-space: nowrap;
+  }
+
+  @media (width < 40rem) {
+    .hero-marks {
+      font-size: clamp(0.5625rem, 2.7vw, 0.71875rem);
+      letter-spacing: 0.12em;
+    }
+  }
+
   /* The interior pages' picture band. The copy sits along the bottom rather
      than the side, so the weight goes there and the top of the frame is left
      alone — and like the hero veil it fades the whole way rather than laying a

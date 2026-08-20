@@ -92,12 +92,16 @@ export function Hero() {
           than as a rail. A two-column grid cannot do that: whatever the
           viewport, it is always two even rows of two, aligned to the same left
           edges as the copy above. From `sm` the row fits across the full
-          measure and the original spread returns untouched. */}
+          measure and the original spread returns untouched.
+
+          `.hero-marks` (globals.css) keeps each mark on a single line at any
+          width — a mark broken across two lines was the other half of what
+          made this rail look accidental. */}
       <div className="relative border-t border-white/20">
         <Container>
           <ul className="grid grid-cols-2 gap-x-4 gap-y-3 py-5 sm:flex sm:flex-wrap sm:items-center sm:justify-between sm:gap-x-6 sm:gap-y-2.5 sm:py-6">
             {homeHero.marks.map((mark) => (
-              <li key={mark} className="type-label text-white/75 sm:whitespace-nowrap">
+              <li key={mark} className="type-label hero-marks text-white/75">
                 {mark}
               </li>
             ))}
