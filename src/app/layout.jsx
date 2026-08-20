@@ -29,12 +29,12 @@ const dmSans = DM_Sans({
 export const metadata = {
   metadataBase: new URL("https://journalbrokerage.com"),
   title: {
-    default: "Journal Brokerage — Title, Tax & Municipal Lien Research",
+    default: "The Journal Brokerage — Title, Tax & Municipal Lien Research",
     template: `%s — ${brand.name}`,
   },
   description: brand.statement,
   openGraph: {
-    title: "Journal Brokerage — Title, Tax & Municipal Lien Research",
+    title: "The Journal Brokerage — Title, Tax & Municipal Lien Research",
     description: brand.statement,
     siteName: brand.name,
     type: "website",
@@ -52,12 +52,12 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={dmSans.variable}>
       <body className="flex min-h-screen flex-col bg-white">
-        <a
+        {/* <a
           href="#main"
           className="sr-only rounded-xs bg-navy px-4 py-2 text-white focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-[60]"
         >
           Skip to content
-        </a>
+        </a> */}
         <Nav />
         <main id="main" className="flex-1">
           {children}

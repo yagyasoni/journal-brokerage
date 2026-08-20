@@ -1,4 +1,5 @@
 import { ButtonLink } from "@/components/shared/ButtonLink";
+import { CallSpecialist } from "@/components/shared/CallSpecialist";
 import { Eyebrow } from "@/components/shared/Eyebrow";
 import { ReportCard } from "@/components/shared/ReportCard";
 import { SectionShell } from "@/components/shared/SectionShell";
@@ -35,9 +36,7 @@ export function SampleReport() {
             <ButtonLink href={routes.sampleReport} variant="gold" size="pill">
               Download sample <span aria-hidden="true">&rarr;</span>
             </ButtonLink>
-            <ButtonLink href={routes.consultation} variant="outlineNavy" size="pill">
-              Talk to a specialist
-            </ButtonLink>
+            <CallSpecialist variant="outlineNavy" size="pill" />
           </div>
         </div>
 

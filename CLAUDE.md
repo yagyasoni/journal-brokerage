@@ -23,36 +23,74 @@ Each is load-bearing. Breaking one makes a page look like it belongs to a differ
 2. **No raw hex in JSX.** Token classes only. Gold text is `gold-deep` on light and `gold-light` on navy; plain `gold` is for rules, icons and large numerals (it fails WCAG AA as small text). Separate with hairlines (`border-rule`), never shadows.
 3. **Routes come from `routes` in `src/data/nav.js`.** Never type a path inline — not in a link, not in a sitemap, not in a canonical URL.
 4. **Copy lives in `src/data/`.** Those files carry `// @ts-check` + typedefs from `types.js`. Component files deliberately do **not**.
-   `jsconfig.json` sets `checkJs: false`, so the per-file `// @ts-check` pragma is the *only* thing that puts a file under `pnpm typecheck`.
+   `jsconfig.json` sets `checkJs: false`, so the per-file `// @ts-check` pragma is the _only_ thing that puts a file under `pnpm typecheck`.
 
 ## Body copy
 
 No class. Use exactly these four, invent no fifth:
 
-| Use | Class |
-| --- | --- |
-| Section intro | `text-[17px] leading-[1.7]` |
-| Card / step body | `text-[15.5px] leading-[1.7]` |
-| Record values, footer links | `text-[14.5px]` |
-| Sub-notes | `text-[12.5px]` |
+| Use                         | Class                         |
+| --------------------------- | ----------------------------- |
+| Section intro               | `text-[17px] leading-[1.7]`   |
+| Card / step body            | `text-[15.5px] leading-[1.7]` |
+| Record values, footer links | `text-[14.5px]`               |
+| Sub-notes                   | `text-[12.5px]`               |
 
 ## Reuse before you build — with real import paths
 
-| Component | Path | Signature |
-| --- | --- | --- |
-| `SectionShell`, `Container` | `@/components/shared/SectionShell` | `tone="white\|paper\|navy\|navyDeep"`, `size="default\|compact\|flush"`, `bleed`, `reveal`, `labelledBy`, `as`, `id`, `innerClassName` |
-| `CTABand` | `@/components/sections/CTABand` | `{ eyebrow, heading, body, primary, secondary?, headingId }` — renders `navyDeep` + `h2.type-display` |
-| `ProcessSteps` | `@/components/sections/ProcessSteps` | `{ steps, tone="light\|navy" }` — **not** in `shared/` |
-| `RecordRow` | `@/components/shared/RecordRow` | `{ label, value, note?, mono?, verified? }` |
-| `StatTile`, `StatStrip` | `@/components/shared/StatTile` | `{ value, caption }` / `{ children }` |
-| `Chip`, `ChipRow` | `@/components/shared/Chip` | `variant="outline\|solid\|muted"` |
-| `Eyebrow` | `@/components/shared/Eyebrow` | `{ tone="light\|navy", align="start\|center" }` |
-| `ArrowLink` | `@/components/shared/ArrowLink` | `{ href, tone="light\|navy" }` |
-| `ButtonLink` | `@/components/shared/ButtonLink` | `variant="gold\|outlineNavy\|outlineLight"`, `size="pill\|heroPill\|navCta"` |
-| `AbstractCard`, `ReportCard`, `CertifiedSeal`, `Marquee`, `Reveal` | `@/components/shared/…` | — |
+| Component                                                          | Path                                 | Signature                                                                                                                                               |
+| ------------------------------------------------------------------ | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `SectionShell`, `Container`                                        | `@/components/shared/SectionShell`   | `tone="white\|paper\|navy\|navyDeep"`, `size="default\|opening\|screen\|compact\|flush"`, `bleed`, `reveal`, `labelledBy`, `as`, `id`, `innerClassName` |
+| `CTABand`                                                          | `@/components/sections/CTABand`      | `{ eyebrow, heading, body, primary, secondary?, headingId }` — renders `navyDeep` + `h2.type-display`                                                   |
+| `ProcessSteps`                                                     | `@/components/sections/ProcessSteps` | `{ steps, tone="light\|navy" }` — **not** in `shared/`                                                                                                  |
+| `RecordRow`                                                        | `@/components/shared/RecordRow`      | `{ label, value, note?, mono?, verified? }`                                                                                                             |
+| `StatTile`, `StatStrip`                                            | `@/components/shared/StatTile`       | `{ value, caption }` / `{ children }`                                                                                                                   |
+| `Chip`, `ChipRow`                                                  | `@/components/shared/Chip`           | `variant="outline\|solid\|muted"`                                                                                                                       |
+| `PictureBand`                                                      | `@/components/shared/PictureBand`    | `{ band, headingId }` — dispatches on `band.variant`; see [The band system](#the-band-system)                                                           |
+| `Eyebrow`                                                          | `@/components/shared/Eyebrow`        | `{ tone="light\|navy", align="start\|center" }`                                                                                                         |
+| `ArrowLink`                                                        | `@/components/shared/ArrowLink`      | `{ href, tone="light\|navy" }`                                                                                                                          |
+| `ButtonLink`                                                       | `@/components/shared/ButtonLink`     | `variant="gold\|outlineNavy\|outlineLight"`, `size="pill\|heroPill\|navCta"`                                                                            |
+| `AbstractCard`, `ReportCard`, `CertifiedSeal`, `Marquee`, `Reveal` | `@/components/shared/…`              | —                                                                                                                                                       |
 
 Every CTA navigates, so buttons are always `ButtonLink`. New variants go in the `cva` in `src/components/ui/button.jsx`, never inline.
 Icons are stored in data as **names** and resolved via `getIcon()` (`src/lib/icons.js`, 9 registered, falls back to `Search`). Register a new icon there and in the `IconName` typedef first.
+
+## The band system
+
+**A page is a stack of screens, and no measurement is a number in JSX.** Every
+size on the site derives from four tokens in `globals.css`:
+
+| Token                             | Is                                                      | Used by                                                      |
+| --------------------------------- | ------------------------------------------------------- | ------------------------------------------------------------ |
+| `--nav-h`                         | The sticky bar's _whole_ height — hairline, row, border | the hero's negative margin, `--screen`, `scroll-padding-top` |
+| `--screen`                        | `100svh - var(--nav-h)` — one screen below the bar      | `.band`, the minimum height of every section                 |
+| `--band-pad` / `--band-pad-tight` | Fluid air inside a band                                 | `size="default"` / `size="opening"`                          |
+| `--gutter`, `--measure`           | Fluid gutter and capped text measure                    | `Container`                                                  |
+
+`.band` is `min-height: var(--screen)` plus a centring flex column, so a scroll
+comes to rest on a whole section rather than on the seam between two —
+`scroll-snap-type: y proximity` on `html` does the settling, `proximity` so a
+long band can still be read at any pace. `min-height`, never `height`: a band
+with more content than fits simply grows.
+
+Consequences worth knowing before you edit:
+
+- **Never write an `h-[NNNpx]` or `min-h-[NNrem]`.** Heights are `svh`
+  fractions, `--screen`, or content. `svh` — not `vh` — so a phone's
+  collapsing address bar does not cut the last line off.
+- **`--nav-h` is measured, not guessed.** It is 70px / 74px because that is
+  what `Nav` actually renders. Change the bar's row height and this changes
+  with it, or every band's bottom edge misses the fold.
+- **Do not override `.band`'s `flex-direction` from a breakpoint.** `.band` and
+  `lg:flex-row` are both utilities, so which wins is a source-order coin toss.
+  Nest a `flex flex-1` row inside the band instead — `PictureBand`'s `split`
+  shows the pattern.
+- The five interior photographs each get **their own arrangement**, keyed by
+  `variant` in the page's data file: `cinema` (`/solutions`), `split`
+  (`/why-us`), `portal` (`/coverage`), `strip` (`/how-it-works`), `frame`
+  (`/industries`). They are all the same dusk exterior genre — the arrangement,
+  not the crop, is what stops them reading as one picture five times. One
+  variant per page; never reuse one.
 
 ## The canonical section — copy this shape
 
@@ -60,11 +98,15 @@ Icons are stored in data as **names** and resolved via `getIcon()` (`src/lib/ico
 <SectionShell tone="paper" labelledBy="x-heading">
   <div className="max-w-2xl">
     <Eyebrow>Short label</Eyebrow>
-    <h2 id="x-heading" className="type-heading mt-7 text-ink">Heading</h2>
+    <h2 id="x-heading" className="type-heading mt-7 text-ink">
+      Heading
+    </h2>
     <p className="mt-7 text-[17px] leading-[1.7] text-slate">Intro.</p>
   </div>
   {/* content: real <ul>/<ol>, rows split by `border-b border-rule`, never bullets */}
-  <ArrowLink href={routes.x} className="mt-10">Go deeper</ArrowLink>
+  <ArrowLink href={routes.x} className="mt-10">
+    Go deeper
+  </ArrowLink>
 </SectionShell>
 ```
 
@@ -86,15 +128,15 @@ A new arrangement used on 2+ pages goes in `src/components/shared/`; a one-page 
 
 `/` is a teaser that hands off via `ArrowLink`; depth on `/` is the one way to make the site feel cheap.
 
-| Source | Owned in full by |
-| --- | --- |
-| `services.js` | `/solutions/*` — deliverable ledgers, scope, turnarounds |
-| `steps.js` | `/how-it-works` |
-| `promises.js` | `/why-us` |
-| `coverage.js` | `/coverage` |
-| `industries.js` | `/industries` |
-| `report.js` | `/sample-report` |
-| — | `/contact`, `/order`, `/request-consultation` — forms |
+| Source          | Owned in full by                                         |
+| --------------- | -------------------------------------------------------- |
+| `services.js`   | `/solutions/*` — deliverable ledgers, scope, turnarounds |
+| `steps.js`      | `/how-it-works`                                          |
+| `promises.js`   | `/why-us`                                                |
+| `coverage.js`   | `/coverage`                                              |
+| `industries.js` | `/industries`                                            |
+| `report.js`     | `/sample-report`                                         |
+| —               | `/contact`, `/order`, `/request-consultation` — forms    |
 
 ## The SEO layer
 
@@ -122,16 +164,16 @@ There is no test framework — the commands above are the entire verification su
 
 Verified against source. Do not act on the handbook's version of these.
 
-| # | Handbook / README says | Reality |
-| --- | --- | --- |
-| 1 | "All thirteen routes already export `metadata`" | **Twelve.** `src/app/page.jsx` has none — `/` inherits the layout default. The SEO task must **add** one for `/`, not convert it. |
-| 2 | Add `hero-poster.jpg` and video files to `public/media/` | Already there. Still outstanding: the unreferenced `public/*.svg` starter assets (`next`, `vercel`, `window`, `file`, `globe`). |
-| 3 | `ProcessSteps` grouped with `shared/` | It is `@/components/sections/ProcessSteps`. |
-| 4 | layout "sets a theme colour" (implying `metadata`) | It is in the separate `viewport` export — correct for Next 15. Do not "fix" it. |
-| 5 | Worked example adds a `Deliverable` typedef | Duplicates the existing `ReportRow`. Extend that instead — the handbook's own example breaks its own "extend the source, never fork it" rule. |
-| 6 | Worked example imports `routes` in the rewritten page | Unused there. Omit unless the page actually links somewhere. |
-| 7 | README: "Libre Caslon headings, IBM Plex Sans body, IBM Plex Mono" | **Stale — describes the previous design.** The site is DM Sans only (`layout.jsx`, `--font-sans` in `globals.css`). The handbook is right; README is wrong. |
-| 8 | Handbook cites README's `### Type` section | README has no `###` headings at all. The type system lives only in `globals.css`. |
-| 9 | "Leaving `PagePlaceholder` unused is a lint error — the intended tripwire" | **No such tripwire.** `next/core-web-vitals` enables no `no-unused-vars` rule; only `eslint-config-next/typescript.js` does, as a warning, and it is not loaded. Remove the import by hand. |
+| #   | Handbook / README says                                                     | Reality                                                                                                                                                                                     |
+| --- | -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | "All thirteen routes already export `metadata`"                            | **Twelve.** `src/app/page.jsx` has none — `/` inherits the layout default. The SEO task must **add** one for `/`, not convert it.                                                           |
+| 2   | Add `hero-poster.jpg` and video files to `public/media/`                   | Already there. Still outstanding: the unreferenced `public/*.svg` starter assets (`next`, `vercel`, `window`, `file`, `globe`).                                                             |
+| 3   | `ProcessSteps` grouped with `shared/`                                      | It is `@/components/sections/ProcessSteps`.                                                                                                                                                 |
+| 4   | layout "sets a theme colour" (implying `metadata`)                         | It is in the separate `viewport` export — correct for Next 15. Do not "fix" it.                                                                                                             |
+| 5   | Worked example adds a `Deliverable` typedef                                | Duplicates the existing `ReportRow`. Extend that instead — the handbook's own example breaks its own "extend the source, never fork it" rule.                                               |
+| 6   | Worked example imports `routes` in the rewritten page                      | Unused there. Omit unless the page actually links somewhere.                                                                                                                                |
+| 7   | README: "Libre Caslon headings, IBM Plex Sans body, IBM Plex Mono"         | **Stale — describes the previous design.** The site is DM Sans only (`layout.jsx`, `--font-sans` in `globals.css`). The handbook is right; README is wrong.                                 |
+| 8   | Handbook cites README's `### Type` section                                 | README has no `###` headings at all. The type system lives only in `globals.css`.                                                                                                           |
+| 9   | "Leaving `PagePlaceholder` unused is a lint error — the intended tripwire" | **No such tripwire.** `next/core-web-vitals` enables no `no-unused-vars` rule; only `eslint-config-next/typescript.js` does, as a warning, and it is not loaded. Remove the import by hand. |
 
 Also: `src/components/shared/AbstractCard.jsx` is orphaned (nothing imports it, so `abstractFile` in `report.js` is reachable only via dead code), and `routes.howItWorks` appears in `footerNav` only, never `primaryNav`.

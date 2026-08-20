@@ -24,6 +24,26 @@ export const howItWorksPage = {
   },
 };
 
+/**
+ * The picture the sequence is walked over: the end of it, not the middle.
+ *
+ * @type {import("./types").PictureBand}
+ */
+export const howItWorksBand = {
+  image: "/media/band-how-it-works.webp",
+  // Already letterboxed at roughly 2:1, and the only band shot square-on to
+  // its subject. Given the shallow frame, it needs no crop at all.
+  focus: "50% 54%",
+  // A letterbox with the copy centred beneath it. This page is a sequence,
+  // and centred copy under a symmetrical frame is the only arrangement here
+  // that reads as a beginning rather than as an aside.
+  variant: "strip",
+  alt: "The lit entrance of a modern home at night, steps rising to an open front door.",
+  eyebrow: "Where it ends",
+  heading: "Four steps, and then the keys",
+  body: "The sequence below is deliberately unremarkable — order, research, verify, deliver. It is built to be boring, because the day it stops being boring is the day a closing slips.",
+};
+
 export const walkthroughSection = {
   eyebrow: "The walkthrough",
   headingId: "walkthrough",

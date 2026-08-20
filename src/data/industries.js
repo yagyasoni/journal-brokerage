@@ -110,6 +110,26 @@ export const industriesPage = {
   },
 };
 
+/**
+ * The picture the client list is set against.
+ *
+ * @type {import("./types").PictureBand}
+ */
+export const industriesBand = {
+  image: "/media/band-industries.webp",
+  // Cropped left and high, which keeps the broken dusk sky and the tree line
+  // and leaves the house off-centre — the widest, least frontal of the five.
+  focus: "34% 34%",
+  // Cut off by a card that carries the copy down onto the paper. The page is
+  // an index of seven desks; a picture that gets interrupted by the document
+  // is the right note for it.
+  variant: "frame",
+  alt: "A contemporary two-storey house at dusk, its ground floor open to a lit lawn.",
+  eyebrow: "The desk on the other side",
+  heading: "Whoever your client is, this is the file",
+  body: "A title officer, a closing paralegal, and a loan officer all end up looking at the same property — from three different desks, on three different deadlines. We work to whichever one is yours.",
+};
+
 export const industriesSection = {
   eyebrow: "Customer types",
   headingId: "industry-types",

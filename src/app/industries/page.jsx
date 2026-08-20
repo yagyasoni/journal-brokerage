@@ -3,8 +3,9 @@ import { CTABand } from "@/components/sections/CTABand";
 import { IndustryCards } from "@/components/sections/IndustryCards";
 import { Chip, ChipRow } from "@/components/shared/Chip";
 import { Eyebrow } from "@/components/shared/Eyebrow";
+import { PictureBand } from "@/components/shared/PictureBand";
 import { SectionShell } from "@/components/shared/SectionShell";
-import { industries, industriesPage } from "@/data/industries";
+import { industries, industriesBand, industriesPage } from "@/data/industries";
 import { primaryCta, secondaryCta } from "@/data/nav";
 
 export const metadata = {
@@ -18,7 +19,7 @@ export default function IndustriesPage() {
 
   return (
     <>
-      <SectionShell tone="white" labelledBy="industries-heading">
+      <SectionShell tone="white" size="opening" labelledBy="industries-heading">
         <div className="grid gap-x-16 gap-y-14 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-end">
           <div className="max-w-2xl">
             <Eyebrow>{eyebrow}</Eyebrow>
@@ -42,6 +43,8 @@ export default function IndustriesPage() {
           </nav>
         </div>
       </SectionShell>
+
+      <PictureBand band={industriesBand} headingId="industries-band" />
 
       <IndustryCards />
 

@@ -99,6 +99,21 @@ export const enquiryFields = [
   },
 ];
 
+/**
+ * The "Talk to a specialist" dialog. The button does not navigate — the number
+ * is short enough to read in place, and sending someone to a contact page to
+ * find a phone line is a step that earns nothing. The line itself lives in
+ * `contactPhone` in `./nav`, beside every other destination.
+ */
+export const specialistCall = {
+  trigger: "Talk to a specialist",
+  eyebrow: "Direct line",
+  heading: "Speak to a research specialist",
+  body: "Ask about scope, a county, or a file already with us — this line reaches the research desk directly.",
+  callLabel: "Call now",
+  closeLabel: "Close",
+};
+
 /** The highlighted promise beside the form. */
 export const responsePromise = {
   label: "Response time",

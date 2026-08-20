@@ -2,8 +2,9 @@ import { CoverageGrid } from "@/components/sections/CoverageGrid";
 import { CoverageReach } from "@/components/sections/CoverageReach";
 import { CTABand } from "@/components/sections/CTABand";
 import { Eyebrow } from "@/components/shared/Eyebrow";
+import { PictureBand } from "@/components/shared/PictureBand";
 import { SectionShell } from "@/components/shared/SectionShell";
-import { coveragePage, coverageFigures } from "@/data/coverage";
+import { coverageBand, coveragePage, coverageFigures } from "@/data/coverage";
 import { primaryCta, secondaryCta } from "@/data/nav";
 
 export const metadata = {
@@ -16,7 +17,7 @@ export default function CoveragePage() {
 
   return (
     <>
-      <SectionShell tone="white" labelledBy="coverage-heading">
+      <SectionShell tone="white" size="opening" labelledBy="coverage-heading">
         <div className="grid gap-x-16 gap-y-14 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-end">
           <div className="max-w-2xl">
             <Eyebrow>{eyebrow}</Eyebrow>
@@ -53,6 +54,8 @@ export default function CoveragePage() {
           </div>
         </div>
       </SectionShell>
+
+      <PictureBand band={coverageBand} headingId="coverage-band" />
 
       <CoverageGrid />
 

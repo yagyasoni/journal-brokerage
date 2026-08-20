@@ -47,7 +47,7 @@ const buttonVariants = cva(
         pill: "h-[52px] gap-2.5 rounded-full px-8 text-[12.5px] font-normal tracking-[0.12em] uppercase sm:px-9",
         // Sized to keep the whole bar inside the 1180px measure at 1280px.
         navCta:
-          "h-10 gap-1.5 rounded-full px-5 text-[11.5px] font-normal tracking-[0.1em] uppercase",
+          "h-10 gap-1.5 rounded-full px-5 text-[11.5px] font-semibold tracking-[0.1em] uppercase",
       },
     },
     defaultVariants: {

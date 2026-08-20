@@ -1,9 +1,10 @@
 import { CTABand } from "@/components/sections/CTABand";
 import { SolutionBlock } from "@/components/sections/SolutionBlock";
 import { Eyebrow } from "@/components/shared/Eyebrow";
+import { PictureBand } from "@/components/shared/PictureBand";
 import { SectionShell } from "@/components/shared/SectionShell";
 import { primaryCta, secondaryCta } from "@/data/nav";
-import { solutionBlocks, solutionsPage } from "@/data/solutions";
+import { solutionBlocks, solutionsBand, solutionsPage } from "@/data/solutions";
 
 export const metadata = {
   title: "Solutions",
@@ -16,7 +17,7 @@ export default function SolutionsPage() {
 
   return (
     <>
-      <SectionShell tone="white" labelledBy="solutions-heading">
+      <SectionShell tone="white" size="opening" labelledBy="solutions-heading">
         <div className="grid gap-x-16 gap-y-14 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-end">
           <div className="max-w-2xl">
             <Eyebrow>{eyebrow}</Eyebrow>
@@ -63,6 +64,8 @@ export default function SolutionsPage() {
           </nav>
         </div>
       </SectionShell>
+
+      <PictureBand band={solutionsBand} headingId="solutions-band" />
 
       {/* Alternating from `paper` so the first block reads as its own band
           rather than merging into the white opening. */}

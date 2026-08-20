@@ -22,6 +22,25 @@ export const solutionsPage = {
 };
 
 /**
+ * The picture the three lines are set against.
+ *
+ * @type {import("./types").PictureBand}
+ */
+export const solutionsBand = {
+  image: "/media/band-solutions.webp",
+  // Cropped right and low, onto the palms and the water — the two things in
+  // this frame that place it somewhere the other four are not.
+  focus: "74% 62%",
+  // The widest, most complete frame of the five, and the page that fronts the
+  // three service lines — it gets the whole screen.
+  variant: "cinema",
+  alt: "A two-storey glass and stone residence at dusk, lit from within and reflected in water.",
+  eyebrow: "One property, three questions",
+  heading: "Who owns it, what it owes, what the city wants",
+  body: "Any property in front of you raises the same three questions, and a file is only closing-ready once all three are answered from the record. The ledgers below are how each one gets answered.",
+};
+
+/**
  * The furniture of an individual service page — the labels and links that are
  * identical on all three. Only the paragraphs and the ledger change from one
  * page to the next, and those live on the line itself.

@@ -1,13 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
 
 import { Logo, LogoMark } from "@/components/layout/Logo";
 import { ButtonLink } from "@/components/shared/ButtonLink";
-import { Container } from "@/components/shared/SectionShell";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -27,9 +26,48 @@ export function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
+  // The service panel, opened and closed explicitly rather than by `:hover`.
+  //
+  // It used to be pure CSS: `group/panel` on the list item, `group-hover` on
+  // the panel. That cannot work here, because the panel is a *child* of that
+  // item and spans the full width of the window — so `:hover` on the item was
+  // true whenever the pointer sat anywhere in a 1440-wide band beneath the
+  // bar, and the menu hung open over the page with the cursor nowhere near
+  // the word "Solutions". Only two things may hold it open now: the Solutions
+  // item itself, and the three cards. Not the band they sit in, not the
+  // gutters beside them, not the list item's own box.
+  //
+  // The close is delayed a beat so the diagonal from the word down to a card
+  // does not flicker it shut on the way. Opening is immediate.
+  const [panelOpen, setPanelOpen] = useState(false);
+  const closeTimer = useRef(null);
+
+  const openPanel = () => {
+    clearTimeout(closeTimer.current);
+    setPanelOpen(true);
+  };
+
+  const closePanel = ({ delay = 0 } = {}) => {
+    clearTimeout(closeTimer.current);
+    if (!delay) {
+      setPanelOpen(false);
+      return;
+    }
+    closeTimer.current = setTimeout(() => setPanelOpen(false), delay);
+  };
+
+  useEffect(() => () => clearTimeout(closeTimer.current), []);
+
   // The bar earns its hairline shadow only once the reader has left the hero.
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
+    const onScroll = () => {
+      setScrolled(window.scrollY > 24);
+      // Scrolling is leaving. The panel is anchored to a bar that stays put,
+      // so without this it rides down over the page it is covering. React
+      // bails out when the value is already false, so this costs nothing on
+      // the overwhelming majority of scroll events.
+      setPanelOpen(false);
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -38,6 +76,7 @@ export function Nav() {
   // Any navigation closes the drawer, including same-route taps.
   useEffect(() => {
     setMenuOpen(false);
+    setPanelOpen(false);
   }, [pathname]);
 
   const isCurrent = (href) =>
@@ -68,7 +107,13 @@ export function Nav() {
       />
 
       {/* ---- Menu row ---------------------------------------------------- */}
-      <Container className="grid h-[68px] grid-cols-[1fr_auto_1fr] items-center gap-4 md:h-[72px]">
+      {/* The bar runs to the page edges, not to the text measure.
+          `Container` caps its width at `--measure` and centres it, which on a
+          wide monitor parks the crest hundreds of pixels in from the left and
+          the action the same distance in from the right. A bar is furniture,
+          not a column of prose: it takes the full width and stops at the same
+          gutter every other edge on the site stops at. */}
+      <div className="grid h-[68px] w-full grid-cols-[1fr_auto_1fr] items-center gap-4 px-(--gutter) md:h-[72px]">
         {/* The compact mark only exists once the crest has gone. */}
         <div
           className={cn(
@@ -96,9 +141,24 @@ export function Nav() {
                   className={cn(
                     "flex items-center",
                     // `static` keeps the panel's `inset-x-0` measured against
-                    // the header, so it spans the full width of the bar.
-                    hasPanel && "group/panel static"
+                    // the header, so it spans the full width of the bar. The
+                    // hover group that used to live here is gone: this box
+                    // contains that full-width panel, which makes it exactly
+                    // the wrong element to hang `:hover` on.
+                    hasPanel && "static"
                   )}
+                  // Keyboard only. `relatedTarget` is where focus went, so
+                  // tabbing between the word and its cards keeps it open and
+                  // leaving the item altogether closes it.
+                  onBlur={
+                    hasPanel
+                      ? (event) => {
+                          if (!event.currentTarget.contains(event.relatedTarget)) {
+                            closePanel();
+                          }
+                        }
+                      : undefined
+                  }
                 >
                   {index > 0 ? (
                     <span
@@ -114,9 +174,9 @@ export function Nav() {
                     href={link.href}
                     aria-current={isCurrent(link.href) ? "page" : undefined}
                     className={cn(
-                      "type-label relative block py-2.5 tracking-[0.12em] whitespace-nowrap transition-colors",
+                      "nav-label relative block py-2.5 whitespace-nowrap transition-colors",
                       "after:absolute after:inset-x-0 after:-bottom-0.5 after:h-px after:origin-left after:scale-x-0 after:transition-transform after:duration-400 after:ease-[var(--ease-quiet)] hover:after:scale-x-100",
-                      hasPanel && "group-hover/panel:after:scale-x-100",
+                      hasPanel && panelOpen && "after:scale-x-100",
                       overlay ? "after:bg-gold-bright" : "after:bg-gold",
                       isCurrent(link.href)
                         ? overlay
@@ -126,22 +186,45 @@ export function Nav() {
                           ? "text-white/75 hover:text-white"
                           : "text-slate hover:text-navy"
                     )}
+                    onMouseEnter={hasPanel ? openPanel : undefined}
+                    onMouseLeave={hasPanel ? () => closePanel({ delay: 140 }) : undefined}
+                    onFocus={hasPanel ? openPanel : undefined}
+                    onClick={hasPanel ? () => closePanel() : undefined}
                   >
                     {link.label}
                   </Link>
 
-                  {/* The three service lines, laid out under the bar. Pure
-                      CSS — hover or keyboard focus inside the item opens it,
-                      so it works without a scrap of state. */}
+                  {/* The three service lines, laid out under the bar. Hover
+                      and keyboard focus open it, in CSS; the only thing state
+                      does is take the openers away for the moment after a
+                      click. Removing the trigger classes outright beats
+                      fighting `group-hover` with an equally specific override,
+                      where which rule wins is a source-order coin toss. */}
                   {hasPanel ? (
-                    <div className="invisible absolute inset-x-0 top-full translate-y-1 border-b border-rule bg-white opacity-0 shadow-[0_24px_48px_-32px_rgb(0_0_0/0.35)] transition-[opacity,transform,visibility] duration-400 ease-[var(--ease-quiet)] group-focus-within/panel:visible group-focus-within/panel:translate-y-0 group-focus-within/panel:opacity-100 group-hover/panel:visible group-hover/panel:translate-y-0 group-hover/panel:opacity-100">
-                      <Container>
-                        <ul className="grid grid-cols-3 gap-px bg-rule">
+                    <div
+                      className={cn(
+                        "absolute inset-x-0 top-full border-b border-rule bg-white shadow-[0_24px_48px_-32px_rgb(0_0_0/0.35)] transition-[opacity,transform,visibility] duration-400 ease-[var(--ease-quiet)]",
+                        panelOpen
+                          ? "visible translate-y-0 opacity-100"
+                          : "invisible translate-y-1 opacity-0"
+                      )}
+                    >
+                      <div className="w-full px-(--gutter)">
+                        {/* The cards, and only the cards, are the second
+                            surface allowed to hold the panel open — the band
+                            they sit in is not. */}
+                        <ul
+                          className="grid grid-cols-3 gap-px bg-rule"
+                          onMouseEnter={openPanel}
+                          onMouseLeave={() => closePanel({ delay: 140 })}
+                        >
                           {services.map((service) => (
                             <li key={service.id} className="bg-white">
                               <Link
                                 href={service.link.href}
                                 className="group/svc block h-full px-7 py-8 transition-colors duration-300 ease-[var(--ease-quiet)] hover:bg-paper"
+                                onFocus={openPanel}
+                                onClick={() => closePanel()}
                               >
                                 <span className="type-label tnum text-gold-deep">
                                   {service.number}
@@ -156,7 +239,7 @@ export function Nav() {
                             </li>
                           ))}
                         </ul>
-                      </Container>
+                      </div>
                     </div>
                   ) : null}
                 </li>
@@ -206,7 +289,7 @@ export function Nav() {
               className="w-[88%] max-w-sm border-l border-rule bg-white p-0"
             >
               <SheetHeader className="border-b border-rule px-6 py-5 text-left">
-                <SheetTitle className="flex items-center gap-3 text-[15px] font-normal tracking-[0.14em] text-ink uppercase">
+                <SheetTitle className="flex items-center gap-3 text-[15px] font-semibold tracking-[0.14em] text-gold-deep uppercase">
                   <LogoMark className="size-9" />
                   {brand.name}
                 </SheetTitle>
@@ -235,7 +318,7 @@ export function Nav() {
                         <span className="type-label tnum w-5 shrink-0 text-gold">
                           {String(index + 1).padStart(2, "0")}
                         </span>
-                        <span className="text-[17px] font-light tracking-[0.06em] uppercase">
+                        <span className="text-[17px] font-medium tracking-[0.06em] uppercase">
                           {link.label}
                         </span>
                       </SheetClose>
@@ -265,7 +348,7 @@ export function Nav() {
             </SheetContent>
           </Sheet>
         </div>
-      </Container>
+      </div>
     </header>
   );
 }

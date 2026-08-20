@@ -23,7 +23,7 @@ export default function ContactPage() {
 
   return (
     <>
-      <SectionShell tone="white" labelledBy="contact-heading">
+      <SectionShell tone="white" size="opening" labelledBy="contact-heading">
         <div className="max-w-2xl">
           <Eyebrow>{eyebrow}</Eyebrow>
           <h1 id="contact-heading" className="type-heading mt-7 text-ink">

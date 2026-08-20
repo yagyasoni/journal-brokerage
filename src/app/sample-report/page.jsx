@@ -2,6 +2,7 @@ import { CTABand } from "@/components/sections/CTABand";
 import { FileRecord } from "@/components/sections/FileRecord";
 import { ReportAnatomy } from "@/components/sections/ReportAnatomy";
 import { ButtonLink } from "@/components/shared/ButtonLink";
+import { CallSpecialist } from "@/components/shared/CallSpecialist";
 import { Eyebrow } from "@/components/shared/Eyebrow";
 import { ReportCard } from "@/components/shared/ReportCard";
 import { SectionShell } from "@/components/shared/SectionShell";
@@ -15,11 +16,11 @@ export const metadata = {
 
 export default function SampleReportPage() {
   const { eyebrow, title, intro, previewLabel, cta } = sampleReportPage;
-  const [primaryAction, secondaryAction] = sampleReportActions;
+  const [primaryAction] = sampleReportActions;
 
   return (
     <>
-      <SectionShell tone="white" labelledBy="sample-report-page-heading">
+      <SectionShell tone="white" size="opening" labelledBy="sample-report-page-heading">
         <div className="grid items-center gap-16 lg:grid-cols-2 lg:gap-24">
           <div className="max-w-lg">
             <Eyebrow>{eyebrow}</Eyebrow>
@@ -32,9 +33,7 @@ export default function SampleReportPage() {
               <ButtonLink href={primaryAction.href} variant="gold" size="pill">
                 {primaryAction.label} <span aria-hidden="true">&rarr;</span>
               </ButtonLink>
-              <ButtonLink href={secondaryAction.href} variant="outlineNavy" size="pill">
-                {secondaryAction.label}
-              </ButtonLink>
+              <CallSpecialist variant="outlineNavy" size="pill" />
             </div>
           </div>
 

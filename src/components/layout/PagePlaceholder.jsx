@@ -16,7 +16,7 @@ import { routes } from "@/data/nav";
  */
 export function PagePlaceholder({ eyebrow, title, children }) {
   return (
-    <SectionShell tone="white">
+    <SectionShell tone="white" size="opening">
       <div className="max-w-2xl">
         <Eyebrow>{eyebrow}</Eyebrow>
         <h1 className="type-heading mt-7 text-ink">{title}</h1>

@@ -31,6 +31,17 @@ export const stats = [
 ];
 
 /** Marquee entries for the navy trust bar. @type {string[]} */
+/**
+ * The statement band's sound control. Two words, but they are visible copy,
+ * so they live here with the rest of it.
+ *
+ * @type {{ enable: string, disable: string }}
+ */
+export const statementSound = {
+  enable: "Sound on",
+  disable: "Sound off",
+};
+
 export const trustMarquee = [
   "Trusted by title professionals",
   "Serving nationwide",

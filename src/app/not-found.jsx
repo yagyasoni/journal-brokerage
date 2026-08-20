@@ -9,7 +9,7 @@ export const metadata = {
 
 export default function NotFound() {
   return (
-    <SectionShell tone="white">
+    <SectionShell tone="white" size="opening">
       <div className="max-w-xl py-6 md:py-12">
         <Eyebrow>Error 404 · No record</Eyebrow>
 

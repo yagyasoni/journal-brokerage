@@ -2,9 +2,10 @@ import { CTABand } from "@/components/sections/CTABand";
 import { WhyMethod } from "@/components/sections/WhyMethod";
 import { WhyPromises } from "@/components/sections/WhyPromises";
 import { Eyebrow } from "@/components/shared/Eyebrow";
+import { PictureBand } from "@/components/shared/PictureBand";
 import { SectionShell } from "@/components/shared/SectionShell";
 import { primaryCta, secondaryCta } from "@/data/nav";
-import { whyNumbers, whyUsPage } from "@/data/why-us";
+import { whyNumbers, whyUsBand, whyUsPage } from "@/data/why-us";
 
 export const metadata = {
   title: "Why Journal Brokerage",
@@ -16,7 +17,7 @@ export default function WhyUsPage() {
 
   return (
     <>
-      <SectionShell tone="white" labelledBy="why-us-heading">
+      <SectionShell tone="white" size="opening" labelledBy="why-us-heading">
         <div className="grid gap-x-16 gap-y-14 lg:grid-cols-2 lg:items-end">
           <div className="max-w-2xl">
             <Eyebrow>{eyebrow}</Eyebrow>
@@ -49,6 +50,8 @@ export default function WhyUsPage() {
           </div>
         </div>
       </SectionShell>
+
+      <PictureBand band={whyUsBand} headingId="why-us-band" />
 
       <WhyPromises />
 

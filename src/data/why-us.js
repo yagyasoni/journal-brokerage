@@ -22,6 +22,26 @@ export const whyUsPage = {
   },
 };
 
+/**
+ * The picture the argument is made over. Nothing here restates a promise from
+ * `promises.js` — it names what the three of them are ultimately for.
+ *
+ * @type {import("./types").PictureBand}
+ */
+export const whyUsBand = {
+  image: "/media/band-why-us.webp",
+  // Cropped low, onto the wet drive: the reflections are the part of this
+  // frame that no other band has.
+  focus: "46% 76%",
+  // Split down the middle. The page is an argument, and setting the picture
+  // against the argument rather than under it is the point.
+  variant: "split",
+  alt: "A large contemporary residence at dusk, every room lit and the drive still wet from rain.",
+  eyebrow: "What is riding on it",
+  heading: "Someone is closing on this tomorrow",
+  body: "Behind every file is a family, a lender, and a date that has already been set. That is the whole reason the standard below exists — and the reason we would rather hold a file an hour longer than send it out unverified.",
+};
+
 export const promisesSection = {
   eyebrow: "The commitments",
   headingId: "why-promises",

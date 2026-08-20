@@ -9,7 +9,9 @@
 /**
  * @typedef {object} NavLink
  * @property {string} label Visible link text.
- * @property {string} href Absolute in-app route, always starting with "/".
+ * @property {string} href An in-app route starting with "/", or an absolute
+ *   off-site URL (see `externalLinks` in `./nav`), which link components open
+ *   in a new tab.
  */
 
 /**
@@ -31,6 +33,8 @@
  * @property {IconName} icon
  * @property {string} title
  * @property {string} body
+ * @property {string} image Path under `public/`, e.g. "/media/service-title-search.webp".
+ * @property {string} alt What the photograph shows.
  * @property {NavLink} link Call-to-action into the deep service page.
  */
 
@@ -196,6 +200,40 @@
  * @property {string} heading The section's real `h2`.
  * @property {string} body One paragraph under the heading.
  * @property {string} scrollHint Short prompt that fades on the first movement.
+ */
+
+/**
+ * The landing page's opening frame: one photograph, one line, one action.
+ * The photograph is decorative — it is the ground the copy sits on, not
+ * information — so it carries no alt text of its own.
+ *
+ * @typedef {object} HomeHero
+ * @property {string} eyebrow Short gold-ruled label above the headline.
+ * @property {string} heading The page's only `h1`.
+ * @property {string} body One line under it.
+ * @property {string} image Path under `public/`, e.g. "/media/hero-residence.webp".
+ * @property {NavLink} action The single pill in the frame.
+ * @property {string[]} marks The four short assurances along the bottom rail.
+ */
+
+/**
+ * The one photograph on an interior page, with the line held over it. Not
+ * decorative — it is the page's only image, so `alt` describes it properly.
+ *
+ * @typedef {object} PictureBand
+ * @property {string} image Path under `public/`, e.g. "/media/band-why-us.webp".
+ * @property {string} alt What the photograph shows.
+ * @property {string} eyebrow Short gold-ruled label over the heading.
+ * @property {string} heading The band's `h2`.
+ * @property {string} body One paragraph under it.
+ * @property {string} [focus] CSS `object-position` for the crop, e.g. "72% 30%".
+ *   The bands are all dusk exteriors, so an identical centre crop makes five
+ *   pages look like one page. Each band frames a different part of its own
+ *   picture instead. Defaults to "center".
+ * @property {"cinema" | "split" | "portal" | "strip" | "frame"} [variant] How
+ *   the page arranges its photograph — see `PictureBand`. One per page, never
+ *   repeated: the arrangement is what stops five similar dusk exteriors from
+ *   reading as the same picture five times. Defaults to "cinema".
  */
 
 /**

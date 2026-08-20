@@ -2,9 +2,10 @@ import { Eyebrow } from "@/components/shared/Eyebrow";
 import { Marquee } from "@/components/shared/Marquee";
 import { Container } from "@/components/shared/SectionShell";
 import { Reveal } from "@/components/shared/Reveal";
+import { SoundToggle } from "@/components/shared/SoundToggle";
 import { TypeText } from "@/components/shared/TypeText";
 import { brand } from "@/data/nav";
-import { trustMarquee } from "@/data/promises";
+import { statementSound, trustMarquee } from "@/data/promises";
 
 /**
  * The band the hero hands off to.
@@ -17,6 +18,28 @@ import { trustMarquee } from "@/data/promises";
  * The statement types itself in the first time it is scrolled to, just after
  * `Reveal` has finished bringing the band up. It is laid out at full size
  * throughout, so nothing on the page moves while it fills in.
+ *
+ * It types out loud, too — a synthesised keyboard rather than an audio file,
+ * see `@/lib/typewriter-audio`. One key per character, which is what sets the
+ * pace here at 95ms rather than the 32ms it would be if this were silent.
+ *
+ * That number is not a taste call. Discrete sounds stop being heard as
+ * separate events somewhere around eleven or twelve a second and fuse into one
+ * continuous rough texture — the same reason a fast enough drum roll turns
+ * into a pitch. At 52ms this band was firing seventeen keys a second, which is
+ * over that line and also faster than any hand can type, and no amount of
+ * work on how a single key *sounds* can rescue a pulse train running that
+ * fast.
+ *
+ * 95ms, with the flurried rhythm `TypeText` now uses, puts it at eleven a
+ * second — under the line, and with a quarter of the intervals long enough to
+ * be heard as actual pauses rather than as an even patter. It was 80ms, which
+ * ran at the same eleven a second on average but spent its slack in intervals
+ * too short to register; the sentence takes the same fifteen seconds either
+ * way, so the extra air is free.
+ *
+ * `SoundToggle` sits under the rule to turn it off, which a band that makes
+ * noise for this long is required to have.
  */
 export function StatementBand() {
   return (
@@ -26,10 +49,12 @@ export function StatementBand() {
           <Eyebrow align="center">The practice</Eyebrow>
 
           <p className="type-statement mx-auto mt-9 max-w-3xl text-ink">
-            <TypeText text={brand.statement} speed={22} />
+            <TypeText text={brand.statement} speed={40} />
           </p>
 
           <div aria-hidden="true" className="mx-auto mt-12 h-px w-20 bg-gold" />
+
+          {/* <SoundToggle labels={statementSound} className="mt-7" /> */}
         </Container>
       </Reveal>
 

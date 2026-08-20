@@ -50,6 +50,28 @@ export const coveragePage = {
   },
 };
 
+/**
+ * The picture the reach is stated over.
+ *
+ * @type {import("./types").PictureBand}
+ */
+export const coverageBand = {
+  image: "/media/band-coverage.webp",
+  // The one band with a skyline in it: cropped high and right so the lit
+  // towers stay in frame, which is what makes this page's picture read as
+  // downtown rather than as another dusk exterior.
+  focus: "60% 20%",
+  // Hung as a tall print on a light wall — the only band on paper, and the
+  // only one where the photograph is an object on the page rather than the
+  // page itself. A skyline is the one frame here that survives being cropped
+  // to a portrait.
+  variant: "portal",
+  alt: "A corner office and residential building at dusk, downtown towers lit behind it.",
+  eyebrow: "Where we work",
+  heading: "Every county keeps its record differently",
+  body: "A recorder's office in Florida and one in New Jersey do not file, index, or release the same way. Coverage is not a map — it is knowing, county by county, exactly who to ask and what they will hand over.",
+};
+
 /** Derived from the two lists, so the counts cannot fall out of step. */
 export const coverageFigures = [
   {

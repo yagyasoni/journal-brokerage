@@ -48,8 +48,13 @@ export function SolutionDetail({ solution }) {
 
   return (
     <>
-      <SectionShell tone="white" labelledBy={headingId}>
-        <div className="grid gap-x-16 gap-y-14 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-end">
+      <SectionShell tone="white" size="opening" labelledBy={headingId}>
+        {/* `items-start`, not `items-end`. Bottom-aligning the two columns
+            made sense when they were near enough the same height; the ledger
+            beside this one runs to nine entries, so aligning their feet drove
+            the heading half a screen down the page and left the top left
+            corner empty. Both columns start at the top of the band. */}
+        <div className="grid gap-x-16 gap-y-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-start">
           <div className="max-w-2xl">
             <Eyebrow>{eyebrow}</Eyebrow>
             <h1 id={headingId} className="type-heading mt-7 text-ink">
@@ -180,14 +185,14 @@ export function SolutionDetail({ solution }) {
         </div>
       </SectionShell>
 
-      <CTABand
+      {/* <CTABand
         headingId={ctaHeadingId}
         eyebrow={cta.eyebrow}
         heading={cta.heading}
         body={cta.body}
         primary={primaryCta}
         secondary={secondaryCta}
-      />
+      /> */}
     </>
   );
 }

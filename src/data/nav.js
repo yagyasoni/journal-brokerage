@@ -20,9 +20,31 @@ export const routes = {
   consultation: "/request-consultation",
 };
 
+/**
+ * Destinations that are not pages on this site. Kept next to `routes` so a link
+ * still comes from exactly one place, but held apart from it because these are
+ * absolute URLs rather than app paths — `isExternalHref` keys off that
+ * difference to open them in a new tab.
+ */
+export const externalLinks = {
+  /** Google Calendar appointment page. Every "Request a consultation" opens this. */
+  booking: "https://calendar.app.google/9bvjVnoiueGQQ7S47",
+};
+
+/**
+ * The RingCentral line a research specialist answers. `label` is what a visitor
+ * reads, `href` is E.164 so a handset dials it without guessing the country.
+ */
+export const contactPhone = {
+  label: "(551) 227-7726",
+  href: "tel:+15512277726",
+};
+
 export const brand = {
-  name: "Journal Brokerage",
+  name: "The Journal Brokerage",
   tagline: "TITLE · TAX · MUNICIPAL LIEN",
+  /** The line the mark itself carries, set under the wordmark in the logo. */
+  distinction: "A brokerage of distinction",
   statement:
     "A business processing company delivering title, tax, and municipal lien research to the title and mortgage industry — with a firm assurance of accuracy and timeliness.",
   copyright: "© 2026 Journal Brokerage · Authentic Data, Delivered on Time.",
@@ -51,7 +73,7 @@ export const primaryCta = { label: "Order a search", href: routes.order };
 /** @type {import("./types").NavLink} */
 export const secondaryCta = {
   label: "Request a consultation",
-  href: routes.consultation,
+  href: externalLinks.booking,
 };
 
 /** @type {import("./types").NavGroup[]} */
@@ -78,7 +100,7 @@ export const footerNav = [
     title: "Get Started",
     links: [
       { label: "Order a Search", href: routes.order },
-      { label: "Request a Consultation", href: routes.consultation },
+      { label: "Request a Consultation", href: externalLinks.booking },
       { label: "Contact", href: routes.contact },
     ],
   },

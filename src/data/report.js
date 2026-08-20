@@ -68,11 +68,14 @@ export const sampleReportPage = {
  * sample PDF this asks for the report rather than promising a download that
  * 404s — change the label and the href together, never one without the other.
  *
+ * The action beside it is `CallSpecialist`, which opens a dialog rather than
+ * navigating, so its label lives with the rest of that dialog's copy in
+ * `./contact`.
+ *
  * @type {import("./types").NavLink[]}
  */
 export const sampleReportActions = [
   { label: "Request the sample report", href: routes.contact },
-  { label: "Talk to a specialist", href: routes.consultation },
 ];
 
 export const anatomySection = {
