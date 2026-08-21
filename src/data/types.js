@@ -122,6 +122,19 @@
  */
 
 /**
+ * One geographic region, with its two tiers already resolved. Both arrays are
+ * derived from the tier lists in `coverage.js`, so a region can never claim a
+ * state the tiers do not.
+ *
+ * @typedef {object} StateRegion
+ * @property {string} id
+ * @property {string} label
+ * @property {string[]} states Every named state in the region, both tiers.
+ * @property {string[]} core
+ * @property {string[]} expanding
+ */
+
+/**
  * One band of client size on /industries.
  *
  * @typedef {object} ClientScale

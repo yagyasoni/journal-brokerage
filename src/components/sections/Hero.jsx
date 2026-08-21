@@ -42,7 +42,7 @@ export function Hero() {
 
       <div aria-hidden="true" className="hero-veil absolute inset-0" />
 
-      <div className="relative flex flex-1 items-center pt-[calc(var(--nav-h)+var(--band-pad-tight))] pb-(--band-pad-tight)">
+      <div className="relative flex flex-1 items-start pt-[calc(var(--hero-band)+var(--band-pad-tight))] pb-(--band-pad-tight) sm:items-center sm:pt-[calc(var(--nav-h)+var(--band-pad-tight))]">
         <Container>
           <div className="max-w-2xl border-l border-gold/50 pl-6 md:pl-10">
             <div className="hero-rise" style={{ "--rise-delay": "80ms" }}>
@@ -62,8 +62,27 @@ export function Hero() {
               />
             </h1>
 
+            {/* The standfirst, in capitals — set the way capitals have to be
+                set to stay elegant rather than shouted.
+
+                Uppercase removes every ascender and descender, so the word
+                shapes a reader normally scans by are gone and the letters have
+                to be told apart one at a time. That is survivable at this
+                length, but only if the setting gives it room — and the room
+                comes from tracking, weight and leading, not from size. Wide
+                letter-spacing puts air between forms that have lost their
+                silhouettes; the lightest weight stops the line competing with
+                the display headline above it; near-double leading keeps two
+                capital lines from stacking into a block.
+
+                Semibold at default tracking — what this was — is the one
+                combination that makes capitals read as shouting.
+
+                `uppercase` rather than `.toUpperCase()`: the case is a
+                typographic decision, so it lives in the styling and the
+                sentence stays a sentence in `hero.js`. */}
             <p
-              className="hero-rise mt-7 max-w-xl text-[17px] leading-[1.6] font-light text-white/85 sm:text-[19px]"
+              className="hero-rise mt-8 max-w-lg text-[15.5px] leading-[2] font-medium tracking-[0.16em] text-balance text-white/90 uppercase sm:text-[17px] sm:tracking-[0.18em]"
               style={{ "--rise-delay": "620ms" }}
             >
               {homeHero.body}

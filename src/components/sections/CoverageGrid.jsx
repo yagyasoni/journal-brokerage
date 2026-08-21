@@ -1,7 +1,7 @@
 import { Chip, ChipRow } from "@/components/shared/Chip";
 import { Eyebrow } from "@/components/shared/Eyebrow";
 import { SectionShell } from "@/components/shared/SectionShell";
-import { gridSection, stateGroups } from "@/data/coverage";
+import { gridSection, stateGroups, stateRegions } from "@/data/coverage";
 
 /**
  * The full grid, in two marked tiers.
@@ -11,6 +11,12 @@ import { gridSection, stateGroups } from "@/data/coverage";
  * outlined tile for the states we are still moving into. The swatch beside
  * each heading is the legend — no separate key to read, and nothing to fall
  * out of step with the tiles themselves.
+ *
+ * Inside a tier the tiles are broken by region and labelled in the margin.
+ * Forty seven chips in one wrap is a shape, not a list: the eye has no way
+ * into it and no way to confirm a state is missing. Six labelled runs give it
+ * both, and the regions come from `stateRegions`, so a state appears under
+ * exactly the tier its list puts it in.
  */
 export function CoverageGrid() {
   const { eyebrow, headingId, heading, intro } = gridSection;
@@ -55,13 +61,33 @@ export function CoverageGrid() {
                 {group.description}
               </p>
 
-              <ChipRow className="mt-8">
-                {group.states.map((state) => (
-                  <Chip key={state} variant={isCore ? "solid" : "muted"}>
-                    {state}
-                  </Chip>
-                ))}
-              </ChipRow>
+              <div className="mt-9 space-y-8">
+                {stateRegions
+                  .map((region) => ({
+                    ...region,
+                    states: region.states.filter((state) => group.states.includes(state)),
+                  }))
+                  // A tier need not reach every region — the expanding tier
+                  // touches two — so an empty run is dropped rather than
+                  // printed as a label with nothing under it.
+                  .filter((region) => region.states.length > 0)
+                  .map((region) => (
+                    <div
+                      key={region.id}
+                      className="sm:grid sm:grid-cols-[minmax(0,8rem)_minmax(0,1fr)] sm:items-start sm:gap-x-10"
+                    >
+                      <h4 className="type-label text-slate sm:pt-2.5">{region.label}</h4>
+
+                      <ChipRow className="mt-4 sm:mt-0">
+                        {region.states.map((state) => (
+                          <Chip key={state} variant={isCore ? "solid" : "muted"}>
+                            {state}
+                          </Chip>
+                        ))}
+                      </ChipRow>
+                    </div>
+                  ))}
+              </div>
             </section>
           );
         })}

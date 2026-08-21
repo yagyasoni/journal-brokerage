@@ -1,46 +1,269 @@
 // @ts-check
 
 /**
- * The twelve core states. The landing page lists these names only; the full
+ * The forty seven core states. The landing page lists these names only; the full
  * grid, the expanding tier, and the legend belong to /coverage.
  * @type {string[]}
  */
 export const coreStates = [
-  "Florida",
-  "Texas",
-  "New York",
-  "New Jersey",
-  "Georgia",
-  "North Carolina",
-  "South Carolina",
-  "Maryland",
-  "Virginia",
-  "Tennessee",
   "Alabama",
+  "Alaska",
+  "Arizona",
+  "Arkansas",
+  "California",
+  "Colorado",
+  "Connecticut",
   "Delaware",
+  "Florida",
+  "Georgia",
+  "Hawaii",
+  "Idaho",
+  "Illinois",
+  "Indiana",
+  "Iowa",
+  "Kansas",
+  "Kentucky",
+  "Louisiana",
+  "Maryland",
+  "Michigan",
+  "Minnesota",
+  "Mississippi",
+  "Missouri",
+  "Montana",
+  "Nebraska",
+  "Nevada",
+  "New Hampshire",
+  "New Jersey",
+  "New Mexico",
+  "New York",
+  "North Carolina",
+  "North Dakota",
+  "Ohio",
+  "Oklahoma",
+  "Oregon",
+  "Rhode Island",
+  "South Carolina",
+  "South Dakota",
+  "Tennessee",
+  "Texas",
+  "Utah",
+  "Vermont",
+  "Virginia",
+  "Washington",
+  "West Virginia",
+  "Wisconsin",
+  "Wyoming",
 ];
+// [
+//   "Florida",
+//   "Texas",
+//   "New York",
+//   "New Jersey",
+//   "Georgia",
+//   "North Carolina",
+//   "South Carolina",
+//   "Maryland",
+//   "Virginia",
+//   "Tennessee",
+//   "Alabama",
+//   "Delaware",
+// ];
 
 /**
  * States we are actively moving into. Named separately and marked differently
  * on purpose — an honest "expanding" reads better than an over-claimed "core".
  * @type {string[]}
  */
-export const expandingStates = [
+export const expandingStates = ["Maine", "Massachusetts", "Pennsylvania"];
+
+/**
+ * Every US state, alphabetical. The named tiers above are subsets of this —
+ * use it for the "anywhere else, ask" case, never to imply core coverage.
+ * @type {string[]}
+ */
+export const allStates = [
+  "Alabama",
+  "Alaska",
   "Arizona",
+  "Arkansas",
   "California",
   "Colorado",
-  "Nevada",
-  "Ohio",
-  "Pennsylvania",
+  "Connecticut",
+  "Delaware",
+  "Florida",
+  "Georgia",
+  "Hawaii",
+  "Idaho",
   "Illinois",
+  "Indiana",
+  "Iowa",
+  "Kansas",
+  "Kentucky",
+  "Louisiana",
+  "Maryland",
+  "Michigan",
+  "Minnesota",
+  "Mississippi",
+  "Missouri",
+  "Montana",
+  "Nebraska",
+  "Nevada",
+  "New Hampshire",
+  "New Jersey",
+  "New Mexico",
+  "New York",
+  "North Carolina",
+  "North Dakota",
+  "Ohio",
+  "Oklahoma",
+  "Oregon",
+  "Rhode Island",
+  "South Carolina",
+  "South Dakota",
+  "Tennessee",
+  "Texas",
+  "Utah",
+  "Vermont",
+  "Virginia",
+  "Washington",
+  "West Virginia",
+  "Wisconsin",
+  "Wyoming",
 ];
+
+/** 50. Derived, so it cannot fall out of step with the list. */
+export const allStatesCount = allStates.length;
+
+/**
+ * The six regions the coverage is actually spoken about in — "the Southeast
+ * and Mid-Atlantic", "the West and Midwest" — so the states can be read as a
+ * directory rather than as one alphabetical run of forty seven names.
+ *
+ * Membership is stated once, here, and every state belongs to exactly one
+ * region. The tiers below are filtered back out of `coreStates` and
+ * `expandingStates`, so a state can neither be counted twice nor go missing
+ * when a name moves between tiers.
+ * @type {{id: string, label: string, states: string[]}[]}
+ */
+const regionMembership = [
+  {
+    id: "southeast",
+    label: "Southeast",
+    states: [
+      "Alabama",
+      "Arkansas",
+      "Florida",
+      "Georgia",
+      "Kentucky",
+      "Louisiana",
+      "Mississippi",
+      "North Carolina",
+      "South Carolina",
+      "Tennessee",
+    ],
+  },
+  {
+    id: "mid-atlantic",
+    label: "Mid-Atlantic",
+    states: [
+      "Delaware",
+      "Maryland",
+      "New Jersey",
+      "Pennsylvania",
+      "Virginia",
+      "West Virginia",
+    ],
+  },
+  {
+    id: "northeast",
+    label: "Northeast",
+    states: [
+      "Connecticut",
+      "Maine",
+      "Massachusetts",
+      "New Hampshire",
+      "New York",
+      "Rhode Island",
+      "Vermont",
+    ],
+  },
+  {
+    id: "midwest",
+    label: "Midwest",
+    states: [
+      "Illinois",
+      "Indiana",
+      "Iowa",
+      "Kansas",
+      "Michigan",
+      "Minnesota",
+      "Missouri",
+      "Nebraska",
+      "North Dakota",
+      "Ohio",
+      "South Dakota",
+      "Wisconsin",
+    ],
+  },
+  {
+    id: "southwest",
+    label: "Southwest",
+    states: ["Arizona", "New Mexico", "Oklahoma", "Texas"],
+  },
+  {
+    id: "west",
+    label: "West",
+    states: [
+      "Alaska",
+      "California",
+      "Colorado",
+      "Hawaii",
+      "Idaho",
+      "Montana",
+      "Nevada",
+      "Oregon",
+      "Utah",
+      "Washington",
+      "Wyoming",
+    ],
+  },
+];
+
+/**
+ * The same six regions with each tier resolved. `core` and `expanding` are
+ * derived, never typed, so the region ledger on the landing page and the
+ * tiles on /coverage always agree with the two lists at the top of this file.
+ * @type {import("./types").StateRegion[]}
+ */
+export const stateRegions = regionMembership.map((region) => ({
+  id: region.id,
+  label: region.label,
+  states: region.states,
+  core: region.states.filter((state) => coreStates.includes(state)),
+  expanding: region.states.filter((state) => expandingStates.includes(state)),
+}));
+
+/**
+ * The landing teaser's own ledger foot. Both figures are counted from the tier
+ * lists, so the summary under the regions cannot drift from the regions above
+ * it — or from the figures on /coverage.
+ */
+export const landingCoverage = {
+  figures: [
+    { value: String(coreStates.length), caption: "Core states" },
+    { value: String(expandingStates.length), caption: "Expanding" },
+  ],
+  footnote: "Nationwide on request",
+};
 
 /** The page's own framing copy. */
 export const coveragePage = {
   eyebrow: "Geographic coverage",
   title: "Deep in the states you close in.",
-  intro:
-    "Our team already has hands-on experience across the Southeast and Mid-Atlantic, with active expansion into the West and Midwest. Wherever the record lives, we know how to reach it.",
+  intro: [
+    "Our team has hands-on experience across the Southeast and Mid-Atlantic, with established coverage spanning 47 U.S. states. We are actively expanding into the West and Midwest, extending our reach into the remaining three.",
+    "Wherever the record lives, we know how to reach it — with the local knowledge, jurisdictional familiarity, and research expertise needed to navigate records efficiently across the U.S.",
+  ],
   figuresLabel: "At a glance",
   footnote: "Nationwide on request.",
   cta: {
@@ -107,7 +330,7 @@ export const stateGroups = [
 export const gridSection = {
   eyebrow: "The map, in full",
   headingId: "coverage-grid",
-  heading: "Nineteen states, marked honestly",
+  heading: "forty seven states, marked honestly",
   intro:
     "Filled tiles are core coverage. Outlined tiles are states we are actively expanding into. The distinction is deliberate — it tells you what to expect before you send the file, not after.",
 };

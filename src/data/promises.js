@@ -25,8 +25,8 @@ export const promises = [
 /** @type {import("./types").Stat[]} */
 export const stats = [
   { value: "6σ", caption: "Quality standard" },
-  { value: "24h", caption: "Typical turnaround" },
-  { value: "50", caption: "States served" },
+  { value: "4h", caption: "Typical turnaround" },
+  { value: "47", caption: "States served" },
   { value: "100%", caption: "Source verified" },
 ];
 

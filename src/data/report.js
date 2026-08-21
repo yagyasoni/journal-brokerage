@@ -92,7 +92,7 @@ export const reportParts = [
     id: "header",
     number: "01",
     title: "Report header",
-    body: "The report type, its number, and the county, carried with the verification stamp — enough to file it correctly without opening the body.",
+    body: "The report type and its order number — clearly identified to ensure the report can be filed, tracked, and referenced correctly without opening the body.",
   },
   {
     id: "findings",
@@ -104,7 +104,7 @@ export const reportParts = [
     id: "status",
     number: "03",
     title: "Verification and status",
-    body: `Anything reconciled against source is marked as verified, and the block closes on a single status line — “${statusRow.value}” when the file is clear.`,
+    body: `Every data point is carefully reviewed and reconciled against the relevant source. Once the information has been validated, it is verified by our "Subject Matter Experts (SMEs)" to ensure accuracy, consistency, and completeness.`,
   },
 ];
 

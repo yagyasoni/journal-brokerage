@@ -24,7 +24,11 @@ export default function CoveragePage() {
             <h1 id="coverage-heading" className="type-heading mt-7 text-ink">
               {title}
             </h1>
-            <p className="mt-7 text-[17px] leading-[1.7] text-slate">{intro}</p>
+            {intro.map((paragraph) => (
+              <p key={paragraph} className="mt-7 text-[17px] leading-[1.7] text-slate">
+                {paragraph}
+              </p>
+            ))}
           </div>
 
           {/* Both figures are counted from the state lists themselves, so the
