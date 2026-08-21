@@ -540,24 +540,30 @@
   @media (width < 40rem) {
     .hero-push {
       transform-origin: 50% 50%;
-      /* Fast, because motion is read as a rate and not as a distance. Nine
-         per cent over eight seconds was under two pixels a second on a band
-         this size — technically moving, perceptually still. The same travel
-         over three seconds is unmistakable, and it is the clock doing that
-         rather than the scale, which has to stay small: every point of scale
-         is width off both edges, and the width is what the band was for. */
-      animation-duration: 3.2s;
-      animation-delay: 300ms;
+      /* Two things make a push read as a push, and they pull against each
+         other: it has to move fast enough to be seen at all, and it has to
+         run long enough that the turn does not arrive while you are still
+         watching the travel. Nine per cent over eight seconds failed the
+         first — under two pixels a second, technically moving and
+         perceptually still. Nine per cent over three failed the second: a
+         short cycle on a small travel is not a camera, it is a flicker, in
+         and out before the eye settles.
+
+         So the travel goes up and the clock comes back down with it. The
+         distance is what buys the visibility; the six seconds are what make
+         it a move rather than a pulse. */
+      animation-duration: 6s;
+      animation-delay: 500ms;
     }
 
     @keyframes hero-zoom {
       from {
         transform: scale(1.01);
       }
-      /* Every point of this is width off both edges again, which is what the
-         band was for — so it stops well short of the full frame's 1.34. */
+      /* Still well short of the full frame's 1.34: every point of it is
+         width off both edges, which is what the band was for. */
       to {
-        transform: scale(1.12);
+        transform: scale(1.2);
       }
     }
   }
@@ -611,13 +617,20 @@
 
      Blurred far enough that it is a field of colour rather than a picture —
      no edge in it competes with the sharp band above, and nothing in it can
-     be mistaken for detail the reader is meant to look at. Dimmed to under
-     half, which is what the veil used to do for legibility, except this is
-     the photograph's own light going down rather than navy being laid over
-     it. Scaled up because a blur samples past its own edges and would
-     otherwise show four soft borders. */
+     be mistaken for detail the reader is meant to look at.
+
+     Nearly all of the saturation goes with it, and this is the part that has
+     to be held down hard. A blur is an average, and averaging a dusk exterior
+     averages the lit windows and the warm sky along with everything else, so
+     the field comes out sand — a colour that is in the photograph but is not
+     what the photograph looks like. At a quarter saturation and under a third
+     brightness what is left is a dark neutral ground with only a trace of the
+     scene's own colour in it.
+
+     Scaled up because a blur samples past its own edges and would otherwise
+     show four soft borders. */
   .hero-soft {
-    filter: blur(34px) saturate(0.82) brightness(0.44);
+    filter: blur(34px) saturate(0.24) brightness(0.3);
     transform: scale(1.16);
   }
 

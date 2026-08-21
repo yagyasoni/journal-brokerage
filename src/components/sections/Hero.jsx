@@ -27,6 +27,15 @@ import { homeHero } from "@/data/hero";
  * the section is pulled up by `--nav-h`, so its bottom edge — the rail of
  * marks — lands precisely on the fold at every viewport, phone included.
  *
+ * Which only holds if nothing inside it is given a fixed size. On a phone the
+ * copy used to be pushed clear of the picture band by a top padding of
+ * `--hero-band`, and a reserved height plus the stack's own height is not one
+ * screen — it is whatever the two happen to add up to, so the rail dropped
+ * below the fold on any handset where that came to more than the viewport.
+ * The copy hangs off the bottom of the frame instead now. It takes the height
+ * it needs, the picture takes what is left above it, and the two meet wherever
+ * the screen says they meet: nothing reserves space it might not have.
+ *
  * The whole stack arrives rather than appears: the headline unfolds letter by
  * letter (`FoldText`) and the eyebrow, line and action lift in behind it on
  * their own beats. Nothing moves at all under reduced motion. `type-display`
@@ -42,7 +51,7 @@ export function Hero() {
 
       <div aria-hidden="true" className="hero-veil absolute inset-0" />
 
-      <div className="relative flex flex-1 items-start pt-[calc(var(--hero-band)+var(--band-pad-tight))] pb-(--band-pad-tight) sm:items-center sm:pt-[calc(var(--nav-h)+var(--band-pad-tight))]">
+      <div className="relative flex flex-1 items-end pt-(--band-pad-tight) pb-(--band-pad-tight) sm:items-center sm:pt-[calc(var(--nav-h)+var(--band-pad-tight))]">
         <Container>
           <div className="max-w-2xl border-l border-gold/50 pl-6 md:pl-10">
             <div className="hero-rise" style={{ "--rise-delay": "80ms" }}>
