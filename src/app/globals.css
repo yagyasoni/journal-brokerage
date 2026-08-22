@@ -304,6 +304,35 @@
     box-shadow: 0 18px 50px -28px color-mix(in oklab, var(--color-navy) 38%, transparent);
   }
 
+  /* ---- The coverage map --------------------------------------------------
+     The country draws itself in west to east rather than arriving whole: each
+     state fades up on a short curve, ordered by `--state-i`, which is the
+     index `CoverageMap` hands each outline (the data is sorted by longitude,
+     so the index *is* the sweep). Opacity only — a real outline scaled from
+     its own centre wobbles, because no two states share a centre.
+
+     Armed off `[data-revealed]`, the flag `Reveal` sets on a band once it is
+     in view: without it the whole sweep would play out behind an opacity of 0
+     while the section is still below the fold, and the reader would arrive at
+     a map that had already finished. */
+  .map-state {
+    opacity: 0;
+  }
+
+  [data-revealed] .map-state {
+    animation: map-state-in 480ms var(--ease-quiet) both;
+    animation-delay: calc(var(--state-i) * 12ms);
+  }
+
+  @keyframes map-state-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
   /* A gold hairline that fades out at both ends — the house divider on navy. */
   .rule-gold-fade {
     height: 1px;
@@ -539,7 +568,7 @@
      crop, and the band is not that crop. */
   @media (width < 40rem) {
     .hero-push {
-      transform-origin: 50% 50%;
+      transform-origin: 90% 90%;
       /* Two things make a push read as a push, and they pull against each
          other: it has to move fast enough to be seen at all, and it has to
          run long enough that the turn does not arrive while you are still
@@ -552,7 +581,7 @@
          So the travel goes up and the clock comes back down with it. The
          distance is what buys the visibility; the six seconds are what make
          it a move rather than a pulse. */
-      animation-duration: 6s;
+      animation-duration: 5s;
       animation-delay: 500ms;
     }
 
@@ -1092,6 +1121,11 @@
     transform: none;
   }
 
+  /* `data-revealed` is set by JS, so with none the map would stay blank. */
+  .map-state {
+    opacity: 1;
+  }
+
   /* FoldText renders its pieces already folded away, so with no JS to unfold
      them the line would never arrive. Put it back. */
   .fold-text-piece {
@@ -1165,6 +1199,13 @@
 
   .type-text-char[data-caret]::after {
     content: none;
+  }
+
+  /* The blanket rule below collapses the stamp to its final frame, but it
+     does not touch the delay — without this the last state would still land
+     most of a second after the first. */
+  [data-revealed] .map-state {
+    animation-delay: 0ms;
   }
 
   *,

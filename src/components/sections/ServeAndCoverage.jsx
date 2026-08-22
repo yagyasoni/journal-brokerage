@@ -1,6 +1,7 @@
 import { Fragment } from "react";
 
 import { ArrowLink } from "@/components/shared/ArrowLink";
+import { CoverageMap, TierMark } from "@/components/shared/CoverageMap";
 import { Eyebrow } from "@/components/shared/Eyebrow";
 import { SectionShell } from "@/components/shared/SectionShell";
 import { landingCoverage, stateRegions } from "@/data/coverage";
@@ -27,8 +28,12 @@ import { routes } from "@/data/nav";
  *
  * Forty seven names in one tracked uppercase run read as filler, because
  * nothing in it could be looked up: there was no entry to find, only length.
- * Grouped into six regions the same list answers a question — "are you in
- * mine?" — in one row instead of one paragraph.
+ * Grouping them into six regions shortened the run without changing what it
+ * was — still a paragraph of names, still six of them to read before finding
+ * your own. The right column now carries `CoverageMap` instead: the states
+ * drawn on the country, where a reader finds theirs by looking where it is. A
+ * teaser should be a glance, and this is the only version of the coverage
+ * claim that can actually be taken in at one.
  */
 /** The only mark between the foot's clauses — a gold point, not a rule. */
 function Separator() {
@@ -103,39 +108,38 @@ export function ServeAndCoverage() {
             expansion into the West and Midwest.
           </p>
 
-          <ul className="mt-11 space-y-8">
-            {stateRegions.map((region) => (
-              <li key={region.id}>
-                <div className="flex items-baseline justify-between gap-6">
-                  <span className="text-[16px] font-light tracking-[0.04em] text-ink">
-                    {region.label}
-                  </span>
-                  <span className="type-label tnum shrink-0 text-gold">
-                    {region.core.length}
-                  </span>
-                </div>
+          {/* The claim itself, and the only part of it a reader has to take
+              in: filled states are core, gold outlines are expanding. Any
+              state names itself on hover, so no name needs to be on the
+              page — which is the whole reason this column is short now. */}
+          <CoverageMap className="mt-11 min-w-0" />
 
-                <p className="mt-2 text-[14.5px] leading-[1.7] text-slate">
-                  {region.core.map((state, index) => (
-                    <Fragment key={state}>
-                      {/* A real string between mapped siblings: mapped JSX has
-                          no whitespace of its own, and without it the row is
-                          one unbreakable run. */}
-                      {index > 0 ? ", " : null}
-                      {/* A two-word state is one entry: never break between
-                          "New" and "Jersey". */}
-                      <span className="whitespace-nowrap">{state}</span>
-                    </Fragment>
-                  ))}
-                </p>
+          {/* The regions, as a count and nothing else. The names used to hang
+              under each one — six runs of them, forty seven in total — and
+              that was the paragraph the map replaced. What is worth keeping is
+              the ledger: six rows, each answering "how deep, and where", with
+              the figure falling to the right edge the way a quantity does. It
+              also gives this column the same six-entry rhythm the industries
+              have on the other side of the rule. */}
+          <ul className="mt-10 space-y-5">
+            {stateRegions.map((region) => (
+              <li key={region.id} className="flex items-baseline justify-between gap-6">
+                <span className="text-[16px] font-light tracking-[0.04em] text-ink">
+                  {region.label}
+                </span>
+                <span className="type-label tnum shrink-0 text-gold">
+                  {region.core.length}
+                </span>
               </li>
             ))}
           </ul>
 
           {/* The foot of the ledger, as one quiet line rather than a bordered
-              block — it is what tells you the gold figures above are states.
-              Both counts are derived from the tier lists, so it cannot drift
-              from the regions it sits under.
+              block. It does two jobs at once: it says what the gold figures
+              count, and — because each clause leads with the map's own mark —
+              it is also the map's key, so there is no separate legend to
+              cross-reference. Both counts are derived from the tier lists, so
+              it cannot drift from the squares it sits under.
 
               Each clause is one unbreakable item in a wrapping flex row, and
               the whole clause moves to the next line or none of it does. Set
@@ -148,9 +152,10 @@ export function ServeAndCoverage() {
               `gap-y-3` then does what `type-label`'s solid line-height cannot:
               the class is set to line-height 1, which is right for a one-line
               eyebrow and leaves two wrapped lines touching. */}
-          <p className="type-label mt-11 flex flex-wrap items-baseline gap-y-3 text-slate">
+          <p className="type-label mt-10 flex flex-wrap items-baseline gap-y-3 text-slate">
             {figures.map((figure) => (
               <span key={figure.caption} className="whitespace-nowrap">
+                <TierMark tier={figure.tier} className="mr-2.5 size-2.5 translate-y-px" />
                 <span className="tnum mr-2 text-gold">{figure.value}</span>
                 {figure.caption}
                 <Separator />

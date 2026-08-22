@@ -258,4 +258,23 @@
  * @property {boolean} [verified] Render the value in the muted verified green.
  */
 
+/**
+ * One state on the coverage map.
+ *
+ * `d` is an SVG path in the projected space `mapViewBox` describes — the
+ * projection has already happened, in `state-map.js`, so nothing downstream
+ * has to know what Albers is. `cx`/`cy` are the state's anchor: where its code
+ * is set, and where the tooltip points.
+ *
+ * @typedef {object} StateShape
+ * @property {string} name
+ * @property {string} abbr Two-letter postal code.
+ * @property {string} d The outline, already projected.
+ * @property {number} cx
+ * @property {number} cy
+ * @property {boolean} labelled False where the state is too small to carry its
+ *   own code at this scale — the eight smallest, which the tooltip names.
+ * @property {"core"|"expanding"} tier Which of the two tiers the state sits in.
+ */
+
 export {};

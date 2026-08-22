@@ -7,7 +7,7 @@ import { Eyebrow } from "@/components/shared/Eyebrow";
 import { ReportCard } from "@/components/shared/ReportCard";
 import { SectionShell } from "@/components/shared/SectionShell";
 import { primaryCta, secondaryCta } from "@/data/nav";
-import { sampleReportActions, sampleReportPage } from "@/data/report";
+import { sampleReportActions, sampleReportFile, sampleReportPage } from "@/data/report";
 
 export const metadata = {
   title: "Sample Report",
@@ -30,7 +30,12 @@ export default function SampleReportPage() {
             <p className="mt-7 text-[17px] leading-[1.7] text-slate">{intro}</p>
 
             <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
-              <ButtonLink href={primaryAction.href} variant="gold" size="pill">
+              <ButtonLink
+                href={primaryAction.href}
+                download={sampleReportFile.filename}
+                variant="gold"
+                size="pill"
+              >
                 {primaryAction.label} <span aria-hidden="true">&rarr;</span>
               </ButtonLink>
               <CallSpecialist variant="outlineNavy" size="pill" />

@@ -1,7 +1,5 @@
 // @ts-check
 
-import { routes } from "./nav";
-
 /** The hero "Abstract of Title" card — a single representative file. */
 export const abstractFile = {
   documentTitle: "Abstract of Title",
@@ -64,9 +62,24 @@ export const sampleReportPage = {
 };
 
 /**
- * The primary action wants a real file behind it. Until `public/` carries a
- * sample PDF this asks for the report rather than promising a download that
- * 404s — change the label and the href together, never one without the other.
+ * The sample PDF itself, in `public/media/`. Stated once here because two
+ * pages point at it — the landing teaser and /sample-report — and a file path
+ * typed twice is a broken link waiting for the file to be renamed.
+ *
+ * `filename` is what the visitor's machine saves it as, which is not the same
+ * question as what the repo calls it: a `sample-report.pdf` sitting in a
+ * downloads folder next to everyone else's says nothing about whose it is.
+ */
+export const sampleReportFile = {
+  href: "/media/sample-report.pdf",
+  filename: "Journal-Brokerage-Sample-Report.pdf",
+};
+
+/**
+ * The primary action now has a real file behind it, so it promises a download
+ * and delivers one. Label and href move together, always — a "Download"
+ * pointing at a form, or a form's label pointing at a file, is worse than
+ * either one done plainly.
  *
  * The action beside it is `CallSpecialist`, which opens a dialog rather than
  * navigating, so its label lives with the rest of that dialog's copy in
@@ -75,7 +88,7 @@ export const sampleReportPage = {
  * @type {import("./types").NavLink[]}
  */
 export const sampleReportActions = [
-  { label: "Request the sample report", href: routes.contact },
+  { label: "Download the sample report", href: sampleReportFile.href },
 ];
 
 export const anatomySection = {

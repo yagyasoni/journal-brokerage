@@ -3,7 +3,7 @@ import { CallSpecialist } from "@/components/shared/CallSpecialist";
 import { Eyebrow } from "@/components/shared/Eyebrow";
 import { ReportCard } from "@/components/shared/ReportCard";
 import { SectionShell } from "@/components/shared/SectionShell";
-import { routes } from "@/data/nav";
+import { sampleReportFile } from "@/data/report";
 
 const FINDINGS = [
   "Plain findings, no interpretation required",
@@ -33,7 +33,12 @@ export function SampleReport() {
           </ul>
 
           <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <ButtonLink href={routes.sampleReport} variant="gold" size="pill">
+            <ButtonLink
+              href={sampleReportFile.href}
+              download={sampleReportFile.filename}
+              variant="gold"
+              size="pill"
+            >
               Download sample <span aria-hidden="true">&rarr;</span>
             </ButtonLink>
             <CallSpecialist variant="outlineNavy" size="pill" />

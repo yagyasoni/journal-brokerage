@@ -250,8 +250,10 @@ export const stateRegions = regionMembership.map((region) => ({
  */
 export const landingCoverage = {
   figures: [
-    { value: String(coreStates.length), caption: "Core states" },
-    { value: String(expandingStates.length), caption: "Expanding" },
+    // `tier` is what the foot's swatch is drawn from, so the two marks under
+    // the map are the same two marks on it.
+    { tier: "core", value: String(coreStates.length), caption: "Core states" },
+    { tier: "expanding", value: String(expandingStates.length), caption: "Expanding" },
   ],
   footnote: "Nationwide on request",
 };
@@ -332,7 +334,8 @@ export const gridSection = {
   headingId: "coverage-grid",
   heading: "forty seven states, marked honestly",
   intro:
-    "Filled tiles are core coverage. Outlined tiles are states we are actively expanding into. The distinction is deliberate — it tells you what to expect before you send the file, not after.",
+    "Filled states are core coverage. States outlined in gold are the ones we are actively expanding into. Hover any state to name it. The distinction is deliberate — it tells you what to expect before you send the file, not after.",
+  regionsLabel: "By region",
 };
 
 export const reachSection = {
