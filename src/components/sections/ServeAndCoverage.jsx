@@ -35,10 +35,18 @@ import { routes } from "@/data/nav";
  * teaser should be a glance, and this is the only version of the coverage
  * claim that can actually be taken in at one.
  */
-/** The only mark between the foot's clauses — a gold point, not a rule. */
+/**
+ * The only mark between the foot's clauses — a gold point, not a rule.
+ *
+ * Gone on a phone, where it is the one thing the line cannot afford: the point
+ * carries 12px of air on each side, and two of them are 48px of a 290px
+ * measure. Dropping them is what lets the two figures share a line instead of
+ * taking one each; the column gap on the row does the separating in their
+ * place, and each clause already opens with its own mark.
+ */
 function Separator() {
   return (
-    <span aria-hidden="true" className="mx-3 text-gold/60">
+    <span aria-hidden="true" className="mx-3 hidden text-gold/60 sm:inline">
       &middot;
     </span>
   );
@@ -152,7 +160,7 @@ export function ServeAndCoverage() {
               `gap-y-3` then does what `type-label`'s solid line-height cannot:
               the class is set to line-height 1, which is right for a one-line
               eyebrow and leaves two wrapped lines touching. */}
-          <p className="type-label mt-10 flex flex-wrap items-baseline gap-y-3 text-slate">
+          <p className="type-label mt-10 flex flex-wrap items-baseline gap-x-4 gap-y-3 text-slate sm:gap-x-0">
             {figures.map((figure) => (
               <span key={figure.caption} className="whitespace-nowrap">
                 <TierMark tier={figure.tier} className="mr-2.5 size-2.5 translate-y-px" />

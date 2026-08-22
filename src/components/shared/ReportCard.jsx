@@ -18,7 +18,19 @@ export function ReportCard({ className }) {
             {badge}
           </span>
         </div>
-        <p className="type-label tnum mt-3.5 text-mist">{subline}</p>
+        {/* `type-label` is set to a solid line-height. That is right for a
+            one-line eyebrow and wrong the moment a line wraps, which this one
+            does on a phone — the county lands under the report number with
+            the two rows touching. The house body leading puts the air back.
+
+            Only where it wraps, though: a solid line-height on a single line
+            is also what sets this label's height, so leaving the override on
+            everywhere would grow the navy header on every viewport that never
+            had the problem. From `sm` the line fits and the class goes back to
+            its own value. */}
+        <p className="type-label tnum mt-3.5 leading-[1.7] text-mist sm:leading-none">
+          {subline}
+        </p>
       </figcaption>
 
       <dl>
