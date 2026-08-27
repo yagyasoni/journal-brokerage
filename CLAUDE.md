@@ -142,12 +142,14 @@ A new arrangement used on 2+ pages goes in `src/components/shared/`; a one-page 
 
 SEO here is a **data** concern. It must not touch `src/components/sections/`, `globals.css`, or any `type-*` class. **A correct SEO change has a zero-pixel visual diff.**
 
-Not yet built: `src/data/seo.js`, `src/app/sitemap.js`, `src/app/robots.js`, `src/components/seo/JsonLd.jsx`.
+**Built.** `src/data/seo.js`, `src/app/sitemap.js`, `src/app/robots.js`, `src/app/manifest.js`, `src/components/seo/JsonLd.jsx`, `src/components/seo/Analytics.jsx`.
 
-- `src/data/seo.js` holds `site.url`, the organisation profile, `pageMetadata({title, description, path})` and the JSON-LD builders. Move the hardcoded `https://journalbrokerage.com` out of `layout.jsx` into `site.url` first — everything depends on it existing in exactly one place.
-- The sitemap derives from `Object.values(routes)` — never hand-list a path.
-- **Live bug:** only the root defines `openGraph`, so every child page currently inherits the home page's OG title.
-- Structured data must be **true of the page**: `Organization` on `/`, `Service` on the three `/solutions/*`, `BreadcrumbList` on nested routes, built from `services.js` + `nav.js`. Never invent an `aggregateRating`, review, address or phone number.
+- `src/data/seo.js` is the whole layer: `site.url` (the only place the origin exists), `pageSeo` keyed by the **same keys as `routes`**, `pageMetadata(key)`, and the JSON-LD builders. A page writes `export const metadata = pageMetadata("coverage")` and nothing else.
+- Adding a page means adding a `pageSeo` entry under its `routes` key — title, description, keywords, `crumb`, optional `parent` and `image`. Miss it and `pageMetadata` throws at build time rather than shipping a blank page.
+- The sitemap derives from `[...new Set(Object.values(routes))]` — never hand-list a path. The `Set` is load-bearing: `routes.order` and `routes.contact` are both `/contact`.
+- Keep a page out of the index with `noindex: true` in its `pageSeo` entry — that flag drives both the robots meta tag and `noindexedPaths`, which the sitemap filters on. Do **not** add a `Disallow` to `robots.js` instead; a disallowed page can still be indexed from an external link, because the crawler never fetches the `noindex` telling it to stay away.
+- Structured data must be **true of the page**: `Organization` + `WebSite` on `/`, `Service` with its real deliverable ledger on the three `/solutions/*`, `ItemList` on `/solutions`, `ContactPage` on `/contact`, `BreadcrumbList` everywhere below the root. Never invent an `aggregateRating`, review, address or email — `contact.js` still holds launch placeholders for the last two, which is exactly why neither reaches the schema.
+- Open Graph cards live in `public/media/og/`, generated with `sharp` from the page's own photograph under a navy veil with the logo lockup over it. No font is loaded, so there is nothing to break.
 
 ## Done when
 
@@ -166,8 +168,8 @@ Verified against source. Do not act on the handbook's version of these.
 
 | #   | Handbook / README says                                                     | Reality                                                                                                                                                                                     |
 | --- | -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | "All thirteen routes already export `metadata`"                            | **Twelve.** `src/app/page.jsx` has none — `/` inherits the layout default. The SEO task must **add** one for `/`, not convert it.                                                           |
-| 2   | Add `hero-poster.jpg` and video files to `public/media/`                   | Already there. Still outstanding: the unreferenced `public/*.svg` starter assets (`next`, `vercel`, `window`, `file`, `globe`).                                                             |
+| 1   | "All thirteen routes already export `metadata`"                            | **Resolved.** All twelve pages now route through `pageMetadata()`; `/` has its own entry.                                                                                                   |
+| 2   | Add `hero-poster.jpg` and video files to `public/media/`                   | **Resolved.** The five video/poster files were never referenced from `src/` and have been removed with the `public/*.svg` starter assets — 49.5 MB.                                         |
 | 3   | `ProcessSteps` grouped with `shared/`                                      | It is `@/components/sections/ProcessSteps`.                                                                                                                                                 |
 | 4   | layout "sets a theme colour" (implying `metadata`)                         | It is in the separate `viewport` export — correct for Next 15. Do not "fix" it.                                                                                                             |
 | 5   | Worked example adds a `Deliverable` typedef                                | Duplicates the existing `ReportRow`. Extend that instead — the handbook's own example breaks its own "extend the source, never fork it" rule.                                               |

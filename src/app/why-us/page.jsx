@@ -1,22 +1,25 @@
 import { CTABand } from "@/components/sections/CTABand";
 import { WhyMethod } from "@/components/sections/WhyMethod";
 import { WhyPromises } from "@/components/sections/WhyPromises";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { Eyebrow } from "@/components/shared/Eyebrow";
 import { PictureBand } from "@/components/shared/PictureBand";
 import { SectionShell } from "@/components/shared/SectionShell";
 import { primaryCta, secondaryCta } from "@/data/nav";
+import { breadcrumbLd, graph, pageMetadata } from "@/data/seo";
 import { whyNumbers, whyUsBand, whyUsPage } from "@/data/why-us";
 
-export const metadata = {
-  title: "Why Journal Brokerage",
-  description: "Authentic data, delivered on time.",
-};
+export const metadata = pageMetadata("whyUs");
+
+const structuredData = graph([breadcrumbLd("whyUs")]);
 
 export default function WhyUsPage() {
   const { eyebrow, title, intro, numbersLabel, cta } = whyUsPage;
 
   return (
     <>
+      <JsonLd data={structuredData} />
+
       <SectionShell tone="white" size="opening" labelledBy="why-us-heading">
         <div className="grid gap-x-16 gap-y-14 lg:grid-cols-2 lg:items-end">
           <div className="max-w-2xl">
@@ -57,14 +60,14 @@ export default function WhyUsPage() {
 
       <WhyMethod />
 
-      {/* <CTABand
+      <CTABand
         headingId="why-us-cta"
         eyebrow={cta.eyebrow}
         heading={cta.heading}
         body={cta.body}
         primary={primaryCta}
         secondary={secondaryCta}
-      /> */}
+      />
     </>
   );
 }

@@ -9,7 +9,7 @@
  * @type {import("./types").ExpandBand}
  */
 export const recordBand = {
-  image: "/media/1.png",
+  image: "/media/journal-brokerage-colonnade-dusk.webp",
   alt: "The Journal Brokerage building at dusk, its colonnade lit from below and its monument sign reading Trust. Transparency. Results.",
   title: "The house behind the file",
   heading: "A practice built on the public record",

@@ -193,7 +193,8 @@
  * heading arrives inside it once it fills the screen.
  *
  * @typedef {object} ExpandBand
- * @property {string} image Path under `public/`, e.g. "/media/1.png".
+ * @property {string} image Path under `public/`, e.g.
+ *   "/media/journal-brokerage-colonnade-dusk.webp".
  * @property {string} alt What the photograph shows.
  * @property {string} title Over the closed frame. Decorative — the heading
  *   below is the one that counts for the page outline.

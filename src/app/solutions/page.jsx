@@ -1,22 +1,25 @@
 import { CTABand } from "@/components/sections/CTABand";
 import { SolutionBlock } from "@/components/sections/SolutionBlock";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { Eyebrow } from "@/components/shared/Eyebrow";
 import { PictureBand } from "@/components/shared/PictureBand";
 import { SectionShell } from "@/components/shared/SectionShell";
 import { primaryCta, secondaryCta } from "@/data/nav";
+import { breadcrumbLd, graph, pageMetadata, serviceListLd } from "@/data/seo";
 import { solutionBlocks, solutionsBand, solutionsPage } from "@/data/solutions";
 
-export const metadata = {
-  title: "Solutions",
-  description:
-    "Title search, property tax, and municipal lien research delivered closing-ready.",
-};
+export const metadata = pageMetadata("solutions");
+
+/** The index this page renders, stated as a list Google can read. */
+const structuredData = graph([serviceListLd(), breadcrumbLd("solutions")]);
 
 export default function SolutionsPage() {
   const { eyebrow, title, intro, indexLabel, cta } = solutionsPage;
 
   return (
     <>
+      <JsonLd data={structuredData} />
+
       <SectionShell tone="white" size="opening" labelledBy="solutions-heading">
         <div className="grid gap-x-16 gap-y-14 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-end">
           <div className="max-w-2xl">
@@ -77,14 +80,14 @@ export default function SolutionsPage() {
         />
       ))}
 
-      {/* <CTABand
+      <CTABand
         headingId="solutions-cta"
         eyebrow={cta.eyebrow}
         heading={cta.heading}
         body={cta.body}
         primary={primaryCta}
         secondary={secondaryCta}
-      /> */}
+      />
     </>
   );
 }

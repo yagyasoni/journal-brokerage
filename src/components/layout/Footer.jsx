@@ -35,7 +35,13 @@ export function Footer() {
 
             {footerNav.map((group) => (
               <nav key={group.title} aria-label={group.title}>
-                <h2 className="type-label text-gold-light">{group.title}</h2>
+                {/* A `p`, not an `h2`: these three labels appear on every page,
+                    and as headings they put "Solutions / Company / Get Started"
+                    into all thirteen page outlines ahead of the real content.
+                    The `nav` is already named by its `aria-label`, so nothing
+                    is lost — and `type-label` carries the styling, so the
+                    rendering is identical. */}
+                <p className="type-label text-gold-light">{group.title}</p>
                 <ul className="mt-7 space-y-4">
                   {group.links.map((link, id) => (
                     <li key={id}>
