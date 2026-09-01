@@ -74,14 +74,14 @@ export default function ContactPage() {
         </div>
       </SectionShell>
 
-      <CTABand
+      {/* <CTABand
         headingId="contact-cta"
         eyebrow={cta.eyebrow}
         heading={cta.heading}
         body={cta.body}
         primary={primaryCta}
         secondary={secondaryCta}
-      />
+      /> */}
     </>
   );
 }

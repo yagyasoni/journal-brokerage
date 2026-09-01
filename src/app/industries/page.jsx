@@ -52,14 +52,14 @@ export default function IndustriesPage() {
 
       <ClientScale />
 
-      <CTABand
+      {/* <CTABand
         headingId="industries-cta"
         eyebrow={cta.eyebrow}
         heading={cta.heading}
         body={cta.body}
         primary={primaryCta}
         secondary={secondaryCta}
-      />
+      /> */}
     </>
   );
 }

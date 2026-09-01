@@ -69,14 +69,14 @@ export default function HowItWorksPage() {
 
       <Walkthrough />
 
-      <CTABand
+      {/* <CTABand
         headingId="how-it-works-cta"
         eyebrow={cta.eyebrow}
         heading={cta.heading}
         body={cta.body}
         primary={primaryCta}
         secondary={secondaryCta}
-      />
+      /> */}
     </>
   );
 }
