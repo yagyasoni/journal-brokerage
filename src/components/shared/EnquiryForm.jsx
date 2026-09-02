@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import axios from "axios";
 
 import { FormField } from "@/components/shared/FormField";
 import { Toast } from "@/components/shared/Toast";
@@ -67,20 +66,32 @@ export function EnquiryForm({
     setIsSending(true);
 
     try {
-      await axios.post(endpoint, values);
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
+      });
+
+      // `fetch` resolves on any status, so unlike a rejection-based client the
+      // 400 carrying the route's field errors is read here rather than caught
+      // below — which leaves the `catch` for what it should mean: the request
+      // never completed.
+      if (!response.ok) {
+        const body = await response.json().catch(() => null);
+        const fieldErrors = body?.errors;
+        return fieldErrors
+          ? fail(enquiryStatus.invalidBody, fieldErrors)
+          : fail(enquiryStatus.errorBody);
+      }
+
       form.reset();
       setToast({
         tone: "success",
         title: enquiryStatus.successTitle,
         body: enquiryStatus.successBody,
       });
-    } catch (cause) {
-      // axios rejects on any non-2xx, so a 400's field errors arrive here
-      // rather than on a response we have to inspect ourselves.
-      const fieldErrors = cause.response?.data?.errors;
-      fieldErrors
-        ? fail(enquiryStatus.invalidBody, fieldErrors)
-        : fail(enquiryStatus.errorBody);
+    } catch {
+      fail(enquiryStatus.errorBody);
     } finally {
       setIsSending(false);
     }

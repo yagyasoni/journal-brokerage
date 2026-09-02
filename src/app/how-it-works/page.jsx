@@ -1,21 +1,24 @@
 import { CTABand } from "@/components/sections/CTABand";
 import { Walkthrough } from "@/components/sections/Walkthrough";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { Eyebrow } from "@/components/shared/Eyebrow";
 import { PictureBand } from "@/components/shared/PictureBand";
 import { SectionShell } from "@/components/shared/SectionShell";
 import { howItWorksBand, howItWorksPage, walkthroughSteps } from "@/data/how-it-works";
 import { primaryCta, secondaryCta } from "@/data/nav";
+import { breadcrumbLd, graph, pageMetadata } from "@/data/seo";
 
-export const metadata = {
-  title: "How It Works",
-  description: "From order to closing-ready in four steps.",
-};
+export const metadata = pageMetadata("howItWorks");
+
+const structuredData = graph([breadcrumbLd("howItWorks")]);
 
 export default function HowItWorksPage() {
   const { eyebrow, title, intro, indexLabel, turnaroundNote, cta } = howItWorksPage;
 
   return (
     <>
+      <JsonLd data={structuredData} />
+
       <SectionShell tone="white" size="opening" labelledBy="how-it-works-page-heading">
         <div className="grid gap-x-16 gap-y-14 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-end">
           <div className="max-w-2xl">

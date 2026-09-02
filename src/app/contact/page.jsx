@@ -1,4 +1,5 @@
 import { CTABand } from "@/components/sections/CTABand";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { EnquiryForm } from "@/components/shared/EnquiryForm";
 import { Eyebrow } from "@/components/shared/Eyebrow";
 import { RecordRow } from "@/components/shared/RecordRow";
@@ -11,11 +12,11 @@ import {
   responsePromise,
 } from "@/data/contact";
 import { primaryCta, secondaryCta } from "@/data/nav";
+import { breadcrumbLd, contactPageLd, graph, pageMetadata } from "@/data/seo";
 
-export const metadata = {
-  title: "Contact",
-  description: "Start a search or ask a question.",
-};
+export const metadata = pageMetadata("contact");
+
+const structuredData = graph([contactPageLd(), breadcrumbLd("contact")]);
 
 export default function ContactPage() {
   const { eyebrow, title, intro, formLabel, requiredNote, submitLabel, cta } =
@@ -23,6 +24,8 @@ export default function ContactPage() {
 
   return (
     <>
+      <JsonLd data={structuredData} />
+
       <SectionShell tone="white" size="opening" labelledBy="contact-heading">
         <div className="max-w-2xl">
           <Eyebrow>{eyebrow}</Eyebrow>

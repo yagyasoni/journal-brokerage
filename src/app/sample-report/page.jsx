@@ -1,6 +1,7 @@
 import { CTABand } from "@/components/sections/CTABand";
 import { FileRecord } from "@/components/sections/FileRecord";
 import { ReportAnatomy } from "@/components/sections/ReportAnatomy";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { ButtonLink } from "@/components/shared/ButtonLink";
 import { CallSpecialist } from "@/components/shared/CallSpecialist";
 import { Eyebrow } from "@/components/shared/Eyebrow";
@@ -8,11 +9,13 @@ import { ReportCard } from "@/components/shared/ReportCard";
 import { SectionShell } from "@/components/shared/SectionShell";
 import { primaryCta, secondaryCta } from "@/data/nav";
 import { sampleReportActions, sampleReportPage } from "@/data/report";
+import { breadcrumbLd, graph, pageMetadata } from "@/data/seo";
 
-export const metadata = {
-  title: "Sample Report",
-  description: "See exactly what lands in your file.",
-};
+export const metadata = pageMetadata("sampleReport");
+
+// No `Report` or `Dataset` node here: the specimen on this page is illustrative
+// data for a fictional file, and structured data must describe something real.
+const structuredData = graph([breadcrumbLd("sampleReport")]);
 
 export default function SampleReportPage() {
   const { eyebrow, title, intro, previewLabel, cta } = sampleReportPage;
@@ -20,6 +23,8 @@ export default function SampleReportPage() {
 
   return (
     <>
+      <JsonLd data={structuredData} />
+
       <SectionShell tone="white" size="opening" labelledBy="sample-report-page-heading">
         <div className="grid items-center gap-16 lg:grid-cols-2 lg:gap-24">
           <div className="max-w-lg">

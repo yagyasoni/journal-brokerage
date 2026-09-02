@@ -1,22 +1,25 @@
 import { CoverageGrid } from "@/components/sections/CoverageGrid";
 import { CoverageReach } from "@/components/sections/CoverageReach";
 import { CTABand } from "@/components/sections/CTABand";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { Eyebrow } from "@/components/shared/Eyebrow";
 import { PictureBand } from "@/components/shared/PictureBand";
 import { SectionShell } from "@/components/shared/SectionShell";
 import { coverageBand, coveragePage, coverageFigures } from "@/data/coverage";
 import { primaryCta, secondaryCta } from "@/data/nav";
+import { breadcrumbLd, graph, pageMetadata } from "@/data/seo";
 
-export const metadata = {
-  title: "Coverage",
-  description: "Deep in the states you close in.",
-};
+export const metadata = pageMetadata("coverage");
+
+const structuredData = graph([breadcrumbLd("coverage")]);
 
 export default function CoveragePage() {
   const { eyebrow, title, intro, figuresLabel, footnote, cta } = coveragePage;
 
   return (
     <>
+      <JsonLd data={structuredData} />
+
       <SectionShell tone="white" size="opening" labelledBy="coverage-heading">
         <div className="grid gap-x-16 gap-y-14 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-end">
           <div className="max-w-2xl">

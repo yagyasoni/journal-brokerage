@@ -1,24 +1,26 @@
 import { ClientScale } from "@/components/sections/ClientScale";
 import { CTABand } from "@/components/sections/CTABand";
 import { IndustryCards } from "@/components/sections/IndustryCards";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { Chip, ChipRow } from "@/components/shared/Chip";
 import { Eyebrow } from "@/components/shared/Eyebrow";
 import { PictureBand } from "@/components/shared/PictureBand";
 import { SectionShell } from "@/components/shared/SectionShell";
 import { industries, industriesBand, industriesPage } from "@/data/industries";
 import { primaryCta, secondaryCta } from "@/data/nav";
+import { breadcrumbLd, graph, pageMetadata } from "@/data/seo";
 
-export const metadata = {
-  title: "Industries We Serve",
-  description:
-    "Title companies, law firms, lenders, settlement and escrow companies, agencies, and underwriters.",
-};
+export const metadata = pageMetadata("industries");
+
+const structuredData = graph([breadcrumbLd("industries")]);
 
 export default function IndustriesPage() {
   const { eyebrow, title, intro, chipsLabel, cta } = industriesPage;
 
   return (
     <>
+      <JsonLd data={structuredData} />
+
       <SectionShell tone="white" size="opening" labelledBy="industries-heading">
         <div className="grid gap-x-16 gap-y-14 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-end">
           <div className="max-w-2xl">

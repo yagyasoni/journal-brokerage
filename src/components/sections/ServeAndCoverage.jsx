@@ -58,7 +58,12 @@ export function ServeAndCoverage() {
             same ledger rule the records use, standing on its end. */}
         <div className="min-w-0 lg:border-l lg:border-rule lg:pl-24">
           <Eyebrow>Geographic coverage</Eyebrow>
-          <h2 className="type-heading mt-7 text-ink">Deep in the states you close in</h2>
+          {/* Carries an id like every other section heading, so this column is
+              addressable in the page outline rather than being the one `h2`
+              nothing can point at. */}
+          <h2 id="coverage-teaser-heading" className="type-heading mt-7 text-ink">
+            Deep in the states you close in
+          </h2>
           <p className="mt-7 max-w-md text-[16.5px] leading-[1.7] text-slate">
             Hands-on experience across the Southeast and Mid-Atlantic, with active
             expansion into the West and Midwest.

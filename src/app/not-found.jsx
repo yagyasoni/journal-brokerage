@@ -5,6 +5,10 @@ import { routes } from "@/data/nav";
 
 export const metadata = {
   title: "Page Not Found",
+  // A 404 already returns the right status code, but Next renders this page at
+  // whatever URL was missed — so without this, a mistyped link can put an
+  // "Error 404" entry in the index under a URL that never existed.
+  robots: { index: false, follow: true },
 };
 
 export default function NotFound() {
