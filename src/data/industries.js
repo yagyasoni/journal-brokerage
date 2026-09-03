@@ -3,8 +3,8 @@
 /**
  * Everything about who we serve.
  *
- * This file is the single source: the landing page lists six short names, and
- * /industries describes all seven with their role tags. `industryChips` is
+ * This file is the single source: the landing page names six of them with
+ * their role tags, and /industries describes all seven in full. Both views are
  * derived from the list below rather than typed a second time, so a name only
  * ever has to change in one place.
  *
@@ -87,14 +87,16 @@ export const industries = [
 ];
 
 /**
- * Landing page shows names only — the described cards with role tags belong to
- * /industries. Derived, never re-typed.
+ * The six the landing page names, each with the titles it is usually read by.
+ * The described cards — the body copy, the full seven — still belong to
+ * /industries; the landing row carries the short name and the roles only,
+ * which is what lets a reader recognise themselves without leaving the page.
  *
- * @type {string[]}
+ * Derived, never re-typed: a name or a title changes in the list above.
+ *
+ * @type {import("./types").Industry[]}
  */
-export const industryChips = industries
-  .filter((industry) => industry.onLanding)
-  .map((industry) => industry.shortName);
+export const landingIndustries = industries.filter((industry) => industry.onLanding);
 
 /** The page's own framing copy. */
 export const industriesPage = {

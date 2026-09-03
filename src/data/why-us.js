@@ -13,7 +13,7 @@ export const whyUsPage = {
   eyebrow: "Why Journal Brokerage",
   title: "Authentic data, delivered on time.",
   intro:
-    "Outsourcing research is a trust decision before it is a price decision. These are the three commitments we make on every file, the method that stands behind them, and the numbers we hold ourselves to — so the choice rests on something more specific than a promise.",
+    "Outsourcing research is a trust decision before it is a price decision. At Journal Brokerage, we understand that reliable data is only valuable when it is accurate, timely, and protected. That is why every file we deliver is backed by clear commitments, disciplined research methods, and a security-first approach to data handling.",
   numbersLabel: "By the numbers",
   cta: {
     eyebrow: "Get started",
@@ -111,7 +111,10 @@ const numberDetails = [
     definition: "The Six Sigma quality standard, applied to every report we deliver.",
   },
   { caption: "Typical turnaround", definition: "From order placed to report delivered." },
-  { caption: "States served", definition: "Research delivered in all fifty states." },
+  {
+    caption: "States served",
+    definition: "Research delivered in all forty seven states.",
+  },
   {
     caption: "Source verified",
     definition: "Every report checked against the originating record.",

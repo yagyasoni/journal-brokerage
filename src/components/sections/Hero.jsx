@@ -27,6 +27,15 @@ import { homeHero } from "@/data/hero";
  * the section is pulled up by `--nav-h`, so its bottom edge — the rail of
  * marks — lands precisely on the fold at every viewport, phone included.
  *
+ * Which only holds if nothing inside it is given a fixed size. On a phone the
+ * copy used to be pushed clear of the picture band by a top padding of
+ * `--hero-band`, and a reserved height plus the stack's own height is not one
+ * screen — it is whatever the two happen to add up to, so the rail dropped
+ * below the fold on any handset where that came to more than the viewport.
+ * The copy hangs off the bottom of the frame instead now. It takes the height
+ * it needs, the picture takes what is left above it, and the two meet wherever
+ * the screen says they meet: nothing reserves space it might not have.
+ *
  * The whole stack arrives rather than appears: the headline unfolds letter by
  * letter (`FoldText`) and the eyebrow, line and action lift in behind it on
  * their own beats. Nothing moves at all under reduced motion. `type-display`
@@ -42,7 +51,7 @@ export function Hero() {
 
       <div aria-hidden="true" className="hero-veil absolute inset-0" />
 
-      <div className="relative flex flex-1 items-center pt-[calc(var(--nav-h)+var(--band-pad-tight))] pb-(--band-pad-tight)">
+      <div className="relative flex flex-1 items-end pt-(--band-pad-tight) pb-(--band-pad-tight) sm:items-center sm:pt-[calc(var(--nav-h)+var(--band-pad-tight))]">
         <Container>
           <div className="max-w-2xl border-l border-gold/50 pl-6 md:pl-10">
             <div className="hero-rise" style={{ "--rise-delay": "80ms" }}>
@@ -62,8 +71,27 @@ export function Hero() {
               />
             </h1>
 
+            {/* The standfirst, in capitals — set the way capitals have to be
+                set to stay elegant rather than shouted.
+
+                Uppercase removes every ascender and descender, so the word
+                shapes a reader normally scans by are gone and the letters have
+                to be told apart one at a time. That is survivable at this
+                length, but only if the setting gives it room — and the room
+                comes from tracking, weight and leading, not from size. Wide
+                letter-spacing puts air between forms that have lost their
+                silhouettes; the lightest weight stops the line competing with
+                the display headline above it; near-double leading keeps two
+                capital lines from stacking into a block.
+
+                Semibold at default tracking — what this was — is the one
+                combination that makes capitals read as shouting.
+
+                `uppercase` rather than `.toUpperCase()`: the case is a
+                typographic decision, so it lives in the styling and the
+                sentence stays a sentence in `hero.js`. */}
             <p
-              className="hero-rise mt-7 max-w-xl text-[17px] leading-[1.6] font-light text-white/85 sm:text-[19px]"
+              className="hero-rise mt-8 max-w-lg text-[15.5px] leading-[2] font-medium tracking-[0.16em] text-balance text-white/90 uppercase sm:text-[17px] sm:tracking-[0.18em]"
               style={{ "--rise-delay": "620ms" }}
             >
               {homeHero.body}
@@ -83,12 +111,25 @@ export function Hero() {
       </div>
 
       {/* The bottom rail, in the reference's position: a hairline and a row of
-          quiet marks that give the frame a floor to sit on. */}
+          quiet marks that give the frame a floor to sit on.
+
+          Two arrangements, because one row of four does not survive a phone.
+          The marks are different lengths, so a wrapping flex row packed them
+          left and broke wherever the widths happened to run out — three on one
+          line and a lonely fourth under them, which reads as a mistake rather
+          than as a rail. A two-column grid cannot do that: whatever the
+          viewport, it is always two even rows of two, aligned to the same left
+          edges as the copy above. From `sm` the row fits across the full
+          measure and the original spread returns untouched.
+
+          `.hero-marks` (globals.css) keeps each mark on a single line at any
+          width — a mark broken across two lines was the other half of what
+          made this rail look accidental. */}
       <div className="relative border-t border-white/20">
         <Container>
-          <ul className="flex flex-wrap items-center gap-x-8 gap-y-2.5 py-5 sm:justify-between sm:gap-x-6 sm:py-6">
+          <ul className="grid grid-cols-2 gap-x-4 gap-y-3 py-5 sm:flex sm:flex-wrap sm:items-center sm:justify-between sm:gap-x-6 sm:gap-y-2.5 sm:py-6">
             {homeHero.marks.map((mark) => (
-              <li key={mark} className="type-label whitespace-nowrap text-white/75">
+              <li key={mark} className="type-label hero-marks text-white/75">
                 {mark}
               </li>
             ))}

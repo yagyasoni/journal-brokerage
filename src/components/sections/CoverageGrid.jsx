@@ -1,19 +1,28 @@
-import { Chip, ChipRow } from "@/components/shared/Chip";
+import { CoverageMap, TierMark } from "@/components/shared/CoverageMap";
 import { Eyebrow } from "@/components/shared/Eyebrow";
 import { SectionShell } from "@/components/shared/SectionShell";
-import { gridSection, stateGroups } from "@/data/coverage";
+import { gridSection, stateGroups, stateRegions } from "@/data/coverage";
 
 /**
- * The full grid, in two marked tiers.
+ * The full reach, as the country rather than as a list of it.
  *
- * `Chip` already carries the distinction the brief asks for: `solid` is the
- * jurisdiction tile, so core states are filled navy, and `muted` gives the
- * outlined tile for the states we are still moving into. The swatch beside
- * each heading is the legend — no separate key to read, and nothing to fall
- * out of step with the tiles themselves.
+ * This section used to print all fifty names as chips, broken into six
+ * labelled runs. Six runs was already an improvement on one alphabetical wall
+ * of forty seven — but it was still a page of names, and a name in a list
+ * cannot be found without reading every name above it. `CoverageMap` draws the
+ * same fifty on the country, where a visitor finds their own state the way
+ * they would on any map: by looking where it is.
+ *
+ * The map takes the whole measure and the reading of it sits underneath. That
+ * is not only composition — a map squeezed into two thirds of the row is a map
+ * whose state codes are seven pixels tall, and a legend is worth less than the
+ * thing it explains. Under it, the two tiers carry their own swatch, so the
+ * key sits on the definition rather than in a box of its own; the six regions
+ * follow as a plain count. Both come out of `coverage.js`, so neither the
+ * marks nor the figures can drift from the states they describe.
  */
 export function CoverageGrid() {
-  const { eyebrow, headingId, heading, intro } = gridSection;
+  const { eyebrow, headingId, heading, intro, regionsLabel } = gridSection;
 
   return (
     <SectionShell tone="paper" labelledBy={headingId}>
@@ -25,46 +34,41 @@ export function CoverageGrid() {
         <p className="mt-7 text-[17px] leading-[1.7] text-slate">{intro}</p>
       </div>
 
-      <div className="mt-16 space-y-14 lg:mt-20">
-        {stateGroups.map((group) => {
-          const isCore = group.id === "core";
+      <CoverageMap tone="paper" className="mt-12 lg:mt-14" />
 
-          return (
-            <section
-              key={group.id}
-              aria-labelledby={`coverage-${group.id}`}
-              className="border-t border-rule pt-8"
-            >
-              <div className="flex items-center gap-3.5">
-                {/* The legend, sitting on the heading it explains. */}
-                <span
-                  aria-hidden="true"
-                  className={
-                    isCore
-                      ? "size-3 shrink-0 rounded-full bg-navy"
-                      : "size-3 shrink-0 rounded-full border border-rule-strong"
-                  }
-                />
-                <h3 id={`coverage-${group.id}`} className="type-label text-ink">
-                  {group.label}
-                </h3>
-                <span className="type-label tnum text-slate">{group.states.length}</span>
-              </div>
+      <dl className="mt-12 grid gap-x-16 gap-y-9 border-t border-rule pt-9 sm:grid-cols-2 lg:mt-14">
+        {stateGroups.map((group) => (
+          <div key={group.id}>
+            <dt className="flex items-center gap-3.5">
+              {/* The legend, sitting on the tier it explains. */}
+              <TierMark tier={group.id} className="size-3" />
+              <span className="type-label text-ink">{group.label}</span>
+              <span className="type-label tnum text-slate">{group.states.length}</span>
+            </dt>
+            <dd className="mt-4 max-w-md text-[15.5px] leading-[1.7] text-slate">
+              {group.description}
+            </dd>
+          </div>
+        ))}
+      </dl>
 
-              <p className="mt-5 max-w-xl text-[15.5px] leading-[1.7] text-slate">
-                {group.description}
-              </p>
+      {/* The same fifty counted the way the coverage is actually spoken about
+          — "the Southeast and Mid-Atlantic" — set as one strip rather than a
+          column, so the ledger reads along the foot of the map instead of
+          standing beside it competing for the eye. */}
+      <div className="mt-11 border-t border-rule pt-9">
+        <h3 className="type-label text-slate">{regionsLabel}</h3>
 
-              <ChipRow className="mt-8">
-                {group.states.map((state) => (
-                  <Chip key={state} variant={isCore ? "solid" : "muted"}>
-                    {state}
-                  </Chip>
-                ))}
-              </ChipRow>
-            </section>
-          );
-        })}
+        <ul className="mt-7 grid grid-cols-2 gap-x-10 gap-y-6 sm:grid-cols-3 lg:grid-cols-6">
+          {stateRegions.map((region) => (
+            <li key={region.id} className="flex items-baseline justify-between gap-4">
+              <span className="text-[14.5px] text-ink">{region.label}</span>
+              <span className="type-label tnum shrink-0 text-gold">
+                {region.states.length}
+              </span>
+            </li>
+          ))}
+        </ul>
       </div>
     </SectionShell>
   );

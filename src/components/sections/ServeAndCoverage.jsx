@@ -1,28 +1,67 @@
 import { Fragment } from "react";
 
 import { ArrowLink } from "@/components/shared/ArrowLink";
+import { CoverageMap, TierMark } from "@/components/shared/CoverageMap";
 import { Eyebrow } from "@/components/shared/Eyebrow";
 import { SectionShell } from "@/components/shared/SectionShell";
-import { coreStates } from "@/data/coverage";
-import { industryChips } from "@/data/industries";
+import { landingCoverage, stateRegions } from "@/data/coverage";
+import { landingIndustries } from "@/data/industries";
 import { routes } from "@/data/nav";
 
 /**
  * Who we serve, and where.
  *
- * Both halves used to be pill soup. They are set as records now: the client
- * types as a numbered ruled list you can run a finger down, and the states as
- * a single directory line, tracked and separated by gold points, the way a
- * masthead lists its bureaux. Same information, read as a document.
+ * Every entry used to sit between two hairlines. Fourteen full-width rules in
+ * one section is a spreadsheet, not a page: a rule under every line stops
+ * being structure and becomes texture, and it flattens the two halves into
+ * the same grey stripe. The only rule left is the vertical one between the
+ * columns, and the separation is carried by air instead — which is the whole
+ * trick of expensive typography, since white space is the one material that
+ * cannot be faked cheaply.
+ *
+ * The two columns are then told apart by where their figure sits rather than
+ * by more lines. Left, the gold ordinal leads the row and the titles hang off
+ * it, because the order is the point. Right, the region leads and its count
+ * falls to the right edge, the way a quantity sits in a ledger. Same rhythm,
+ * two different records — and both links hang from the same floor, so neither
+ * column strands halfway up.
+ *
+ * Forty seven names in one tracked uppercase run read as filler, because
+ * nothing in it could be looked up: there was no entry to find, only length.
+ * Grouping them into six regions shortened the run without changing what it
+ * was — still a paragraph of names, still six of them to read before finding
+ * your own. The right column now carries `CoverageMap` instead: the states
+ * drawn on the country, where a reader finds theirs by looking where it is. A
+ * teaser should be a glance, and this is the only version of the coverage
+ * claim that can actually be taken in at one.
  */
+/**
+ * The only mark between the foot's clauses — a gold point, not a rule.
+ *
+ * Gone on a phone, where it is the one thing the line cannot afford: the point
+ * carries 12px of air on each side, and two of them are 48px of a 290px
+ * measure. Dropping them is what lets the two figures share a line instead of
+ * taking one each; the column gap on the row does the separating in their
+ * place, and each clause already opens with its own mark.
+ */
+function Separator() {
+  return (
+    <span aria-hidden="true" className="mx-3 hidden text-gold/60 sm:inline">
+      &middot;
+    </span>
+  );
+}
+
 export function ServeAndCoverage() {
+  const { figures, footnote } = landingCoverage;
+
   return (
     <SectionShell tone="white" labelledBy="who-we-serve-heading">
       {/* `min-w-0` on both tracks: a grid item defaults to min-width:auto, and
-          the directory line below would otherwise widen its column instead of
+          the region rows below would otherwise widen their column instead of
           wrapping inside it. */}
       <div className="grid gap-16 lg:grid-cols-2 lg:gap-24">
-        <div className="min-w-0">
+        <div className="flex min-w-0 flex-col">
           <Eyebrow>Who we serve</Eyebrow>
           <h2 id="who-we-serve-heading" className="type-heading mt-7 text-ink">
             Built for the professionals who close
@@ -33,30 +72,43 @@ export function ServeAndCoverage() {
             capacity they can trust.
           </p>
 
-          <ul className="mt-10 border-t border-rule">
-            {industryChips.map((industry, index) => (
-              <li
-                key={industry}
-                className="group/ind flex items-baseline gap-5 border-b border-rule py-4 transition-colors duration-300 ease-[var(--ease-quiet)] hover:border-gold"
-              >
-                <span className="type-label tnum w-6 shrink-0 text-gold">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                <span className="text-[16px] font-light tracking-[0.04em] text-ink">
-                  {industry}
-                </span>
+          <ul className="mt-11 space-y-8">
+            {landingIndustries.map((industry, index) => (
+              <li key={industry.id}>
+                <div className="flex items-baseline gap-5">
+                  <span className="type-label tnum w-6 shrink-0 text-gold">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <span className="text-[16px] font-light tracking-[0.04em] text-ink">
+                    {industry.shortName}
+                  </span>
+                </div>
+
+                {/* The titles the work is commissioned under, hanging off the
+                    ordinal. Rendered only where the list has them — an entry
+                    with no roles gets silence, not an invented title. */}
+                {industry.roles.length > 0 ? (
+                  <p className="mt-2 pl-11 text-[14.5px] leading-[1.7] text-slate">
+                    {industry.roles.map((role, roleIndex) => (
+                      <Fragment key={role}>
+                        {roleIndex > 0 ? ", " : null}
+                        <span className="whitespace-nowrap">{role}</span>
+                      </Fragment>
+                    ))}
+                  </p>
+                ) : null}
               </li>
             ))}
           </ul>
 
-          <ArrowLink href={routes.industries} className="mt-10">
+          <ArrowLink href={routes.industries} className="mt-10 lg:mt-auto lg:pt-10">
             See all industries
           </ArrowLink>
         </div>
 
         {/* A hairline between the columns once they sit side by side — the
             same ledger rule the records use, standing on its end. */}
-        <div className="min-w-0 lg:border-l lg:border-rule lg:pl-24">
+        <div className="flex min-w-0 flex-col lg:border-l lg:border-rule lg:pl-24">
           <Eyebrow>Geographic coverage</Eyebrow>
           {/* Carries an id like every other section heading, so this column is
               addressable in the page outline rather than being the one `h2`
@@ -69,32 +121,63 @@ export function ServeAndCoverage() {
             expansion into the West and Midwest.
           </p>
 
-          <p className="mt-10 border-y border-rule py-8 text-[15px] leading-[2.1] font-light tracking-[0.11em] text-ink uppercase">
-            {coreStates.map((state, index) => (
-              <Fragment key={state}>
-                {/* The spaces inside this span are load-bearing: mapped JSX
-                    siblings have no whitespace between them, so without them
-                    the whole directory is one unbreakable run and overflows
-                    the column instead of wrapping. Margins wouldn't do it —
-                    only real whitespace creates a break opportunity. */}
-                {index > 0 ? (
-                  <span aria-hidden="true" className="text-gold">
-                    {" "}
-                    &middot;{" "}
-                  </span>
-                ) : null}
-                {/* A two-word state is one entry, not two — never let the line
-                    break between "New" and "Jersey". */}
-                <span className="whitespace-nowrap">{state}</span>
-              </Fragment>
+          {/* The claim itself, and the only part of it a reader has to take
+              in: filled states are core, gold outlines are expanding. Any
+              state names itself on hover, so no name needs to be on the
+              page — which is the whole reason this column is short now. */}
+          <CoverageMap className="mt-11 min-w-0" />
+
+          {/* The regions, as a count and nothing else. The names used to hang
+              under each one — six runs of them, forty seven in total — and
+              that was the paragraph the map replaced. What is worth keeping is
+              the ledger: six rows, each answering "how deep, and where", with
+              the figure falling to the right edge the way a quantity does. It
+              also gives this column the same six-entry rhythm the industries
+              have on the other side of the rule. */}
+          <ul className="mt-10 space-y-5">
+            {stateRegions.map((region) => (
+              <li key={region.id} className="flex items-baseline justify-between gap-6">
+                <span className="text-[16px] font-light tracking-[0.04em] text-ink">
+                  {region.label}
+                </span>
+                <span className="type-label tnum shrink-0 text-gold">
+                  {region.core.length}
+                </span>
+              </li>
             ))}
+          </ul>
+
+          {/* The foot of the ledger, as one quiet line rather than a bordered
+              block. It does two jobs at once: it says what the gold figures
+              count, and — because each clause leads with the map's own mark —
+              it is also the map's key, so there is no separate legend to
+              cross-reference. Both counts are derived from the tier lists, so
+              it cannot drift from the squares it sits under.
+
+              Each clause is one unbreakable item in a wrapping flex row, and
+              the whole clause moves to the next line or none of it does. Set
+              as running text it broke in the wrong place every time: mapped
+              JSX puts no whitespace between siblings, so "47", "Core states",
+              the point and "3" were all one word to the browser, and the only
+              break opportunities left in the line were the two real spaces
+              inside the captions themselves.
+
+              `gap-y-3` then does what `type-label`'s solid line-height cannot:
+              the class is set to line-height 1, which is right for a one-line
+              eyebrow and leaves two wrapped lines touching. */}
+          <p className="type-label mt-10 flex flex-wrap items-baseline gap-x-4 gap-y-3 text-slate sm:gap-x-0">
+            {figures.map((figure) => (
+              <span key={figure.caption} className="whitespace-nowrap">
+                <TierMark tier={figure.tier} className="mr-2.5 size-2.5 translate-y-px" />
+                <span className="tnum mr-2 text-gold">{figure.value}</span>
+                {figure.caption}
+                <Separator />
+              </span>
+            ))}
+            <span className="whitespace-nowrap">{footnote}</span>
           </p>
 
-          <p className="type-label mt-6 text-slate">
-            Twelve core states &middot; nationwide on request
-          </p>
-
-          <ArrowLink href={routes.coverage} className="mt-10">
+          <ArrowLink href={routes.coverage} className="mt-10 lg:mt-auto lg:pt-10">
             View full coverage
           </ArrowLink>
         </div>

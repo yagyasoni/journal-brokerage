@@ -133,6 +133,32 @@
     /* The text measure. Capped so a line never runs past comfortable reading
        length on a wide monitor, proportional below that. */
     --measure: min(90vw, 75rem);
+
+    /* How much of the phone's screen the hero photograph gets.
+
+       On a laptop the frame is landscape and so is the picture, so a cover
+       fit crops almost nothing and you see the whole place. Portrait, the
+       same fit has to scale a 3:2 photograph until it is a full screen tall,
+       which throws roughly seventy per cent of its width off both edges —
+       the house, the street and the sky all leave the frame and what is left
+       is a lit fragment.
+
+       So on a phone the picture is a band across the top instead of the
+       whole screen, and the copy sits under it. The crop then falls on the
+       height, where there is depth to spare, rather than on the width, where
+       the subject is. Both the band and the copy's top padding read this one
+       value, so the picture and the words cannot overlap.
+
+       The value is a straight trade and there is no setting that wins both
+       ends of it: 3:2 fills a 390px-wide phone at 260px tall, so any band
+       deeper than that buys its height back out of the width. 40svh keeps
+       roughly three-quarters of the frame across and still gives the picture
+       a proper piece of the screen. Push it much past 45svh and the sides
+       start leaving again; below 32svh nothing is gained, since the width is
+       already whole.
+
+       Ignored from `sm` up, where the frame goes back to full bleed. */
+    --hero-band: 40svh;
   }
 
   @media (min-width: 768px) {
@@ -278,6 +304,35 @@
     box-shadow: 0 18px 50px -28px color-mix(in oklab, var(--color-navy) 38%, transparent);
   }
 
+  /* ---- The coverage map --------------------------------------------------
+     The country draws itself in west to east rather than arriving whole: each
+     state fades up on a short curve, ordered by `--state-i`, which is the
+     index `CoverageMap` hands each outline (the data is sorted by longitude,
+     so the index *is* the sweep). Opacity only — a real outline scaled from
+     its own centre wobbles, because no two states share a centre.
+
+     Armed off `[data-revealed]`, the flag `Reveal` sets on a band once it is
+     in view: without it the whole sweep would play out behind an opacity of 0
+     while the section is still below the fold, and the reader would arrive at
+     a map that had already finished. */
+  .map-state {
+    opacity: 0;
+  }
+
+  [data-revealed] .map-state {
+    animation: map-state-in 480ms var(--ease-quiet) both;
+    animation-delay: calc(var(--state-i) * 12ms);
+  }
+
+  @keyframes map-state-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
   /* A gold hairline that fades out at both ends — the house divider on navy. */
   .rule-gold-fade {
     height: 1px;
@@ -410,6 +465,27 @@
       color-mix(in oklab, var(--color-navy-black) 8%, transparent);
   }
 
+  /* None of that on a phone, and this is the blue the band kept being
+     accused of.
+
+     The veil exists for one job: holding white copy legible where the copy
+     lies over the photograph. On a phone the copy does not — it sits below
+     the band, on the section's own navy — so every layer here is being spent
+     on nothing. Worse, the pool is sized `120% 100% at 4%`, which on a wide
+     frame is a soft darkness down the left third and on a 390px screen is a
+     468px radial covering the entire picture at 62% navy, with a flat 8%
+     wash on top of it.
+
+     That is painted over the masked band as a sibling, so no amount of
+     softening the mask could ever have reached it. The picture is simply
+     shown as it is, and the fade at its foot is the only thing between it
+     and the page. */
+  @media (width < 40rem) {
+    .hero-veil {
+      background: none;
+    }
+  }
+
   /* The camera move, rebuilt for smoothness.
      Two things made the old one hurt to look at, and neither was its speed.
 
@@ -481,6 +557,46 @@
     }
   }
 
+  /* The phone's version of the same push.
+
+     A third of a frame is a cinematic travel across a full-screen landscape
+     crop and a vandalism of a band: the band earned its width back by
+     cropping the height instead, and a 1.34 scale spends that width again.
+     Nine per cent still reads as a live frame at this size — the picture is
+     smaller, so the same apparent motion needs far less of it. The origin
+     centres too, because 58% was aiming at where the house sits in the full
+     crop, and the band is not that crop. */
+  @media (width < 40rem) {
+    .hero-push {
+      transform-origin: 90% 90%;
+      /* Two things make a push read as a push, and they pull against each
+         other: it has to move fast enough to be seen at all, and it has to
+         run long enough that the turn does not arrive while you are still
+         watching the travel. Nine per cent over eight seconds failed the
+         first — under two pixels a second, technically moving and
+         perceptually still. Nine per cent over three failed the second: a
+         short cycle on a small travel is not a camera, it is a flicker, in
+         and out before the eye settles.
+
+         So the travel goes up and the clock comes back down with it. The
+         distance is what buys the visibility; the six seconds are what make
+         it a move rather than a pulse. */
+      animation-duration: 5s;
+      animation-delay: 500ms;
+    }
+
+    @keyframes hero-zoom {
+      from {
+        transform: scale(1.01);
+      }
+      /* Still well short of the full frame's 1.34: every point of it is
+         width off both edges, which is what the band was for. */
+      to {
+        transform: scale(1.2);
+      }
+    }
+  }
+
   /* The copy stack's arrival.
      The headline unfolds (`FoldText`); everything around it used to simply be
      there, which left the line looking like the only live thing on the page.
@@ -498,6 +614,95 @@
     to {
       opacity: 1;
       transform: none;
+    }
+  }
+
+  /* The four marks along the bottom of the hero.
+     `type-label` still owns the register — the weight, the caps, the colour —
+     and this only resolves the one thing a fixed size cannot: on a phone the
+     rail is two columns of roughly half the viewport, and "Six Sigma standard"
+     at 11.5px with 0.16em of tracking is a hair wider than that, so it broke
+     over two lines while its three neighbours sat on one.
+
+     Sizing it in `vw` below `sm` makes the text and the column it has to fit
+     scale together, so a mark that fits at one width fits at every width in
+     the range rather than only at the one it was checked on. The tracking
+     comes in a little at the same time: at 0.16em the letter-spacing alone is
+     a quarter of the width of a long mark, and it is the cheapest place to
+     find room. Both revert at `sm`, where the rail is one row across the full
+     measure and there is space to spare. */
+  .hero-marks {
+    white-space: nowrap;
+  }
+
+  @media (width < 40rem) {
+    .hero-marks {
+      font-size: clamp(0.5625rem, 2.7vw, 0.71875rem);
+      letter-spacing: 0.12em;
+    }
+  }
+
+  /* The phone frame's lower two thirds: the same photograph, out of focus.
+
+     Blurred far enough that it is a field of colour rather than a picture —
+     no edge in it competes with the sharp band above, and nothing in it can
+     be mistaken for detail the reader is meant to look at.
+
+     Nearly all of the saturation goes with it, and this is the part that has
+     to be held down hard. A blur is an average, and averaging a dusk exterior
+     averages the lit windows and the warm sky along with everything else, so
+     the field comes out sand — a colour that is in the photograph but is not
+     what the photograph looks like. At a quarter saturation and under a third
+     brightness what is left is a dark neutral ground with only a trace of the
+     scene's own colour in it.
+
+     Scaled up because a blur samples past its own edges and would otherwise
+     show four soft borders. */
+  .hero-soft {
+    filter: blur(34px) saturate(0.24) brightness(0.3);
+    transform: scale(1.16);
+  }
+
+  /* The bottom edge of the phone's picture band.
+
+     Nothing is laid over the photograph here. A navy overlay — however
+     softly it ramps — is still paint: it lightens to grey over the bright
+     part of the picture and reads as a blue wash sitting on top of it, which
+     is exactly what a gradient cannot hide, because the eye reads the tint
+     before it reads the edge.
+
+     So the picture is masked instead. The image's own alpha falls away over
+     the last third of the band and the section's navy is simply what is
+     behind it — there is no second colour anywhere in the transition, so
+     there is nothing to blend badly. Whatever the photograph is doing at the
+     edge, bright or dark, it dissolves into the page rather than being
+     covered by it.
+
+     Opaque through the top of the band, then eased down over the rest of it
+     rather than ramping straight: a linear alpha falloff reads as a visible
+     stripe of half-picture, and the extra stops keep the change per pixel
+     under the eye's threshold the whole way down. Long, because a short fade
+     has to lose the picture quickly, and quickly is what looks like an edge. */
+  @media (width < 40rem) {
+    .hero-band-dissolve {
+      -webkit-mask-image: linear-gradient(
+        to bottom,
+        rgb(0 0 0) 0%,
+        rgb(0 0 0) 44%,
+        rgb(0 0 0 / 0.86) 60%,
+        rgb(0 0 0 / 0.52) 74%,
+        rgb(0 0 0 / 0.18) 88%,
+        transparent 100%
+      );
+      mask-image: linear-gradient(
+        to bottom,
+        rgb(0 0 0) 0%,
+        rgb(0 0 0) 44%,
+        rgb(0 0 0 / 0.86) 60%,
+        rgb(0 0 0 / 0.52) 74%,
+        rgb(0 0 0 / 0.18) 88%,
+        transparent 100%
+      );
     }
   }
 
@@ -916,6 +1121,11 @@
     transform: none;
   }
 
+  /* `data-revealed` is set by JS, so with none the map would stay blank. */
+  .map-state {
+    opacity: 1;
+  }
+
   /* FoldText renders its pieces already folded away, so with no JS to unfold
      them the line would never arrive. Put it back. */
   .fold-text-piece {
@@ -989,6 +1199,13 @@
 
   .type-text-char[data-caret]::after {
     content: none;
+  }
+
+  /* The blanket rule below collapses the stamp to its final frame, but it
+     does not touch the delay — without this the last state would still land
+     most of a second after the first. */
+  [data-revealed] .map-state {
+    animation-delay: 0ms;
   }
 
   *,
